@@ -1,0 +1,8 @@
+# Node
+npm-debug.log*
+
+# Built JS
+webclient/dist/
+
+# Dependencies
+node_modules/
