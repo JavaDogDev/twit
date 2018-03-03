@@ -1,0 +1,14 @@
+/* Border-box sizing everywhere */
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* Dimensions */
+$main-content-max-width: 1186px;
+
+/* Colors */
+$inactive: #ffffff4d;

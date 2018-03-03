@@ -17,28 +17,21 @@ module.exports = {
     rules: [
       {
         // Build JS and JSX with Babel
-        loader: 'babel-loader',
         test: /\.(js|jsx)$/,
         include: [path.resolve(__dirname, 'webclient/src')],
         query: { presets: ['env', 'react', 'stage-2'] },
         resolve: {
           extensions: ['.js', '.jsx'],
         },
+        loader: 'babel-loader',
       },
       {
         // Compile SCSS into CSS and allow requiring from JS files
         test: /\.scss$/,
         include: [path.resolve(__dirname, 'webclient/src')],
-        loaders: ['style-loader', 'css-loader', 'sass-loader'],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
-  },
-
-  // Mark these as external (not to be included in the bundle,
-  // because they're included through script tags linking to CDNs)
-  externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM',
   },
 
   plugins: [
