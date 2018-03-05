@@ -1,4 +1,14 @@
 .trough {
   display: flex;
   flex-flow: column nowrap;
+
+  .trough-twat {
+    width: 100%;
+    border: 1px solid black;
+
+    // To prevent double borders
+    &:not(:first-child) {
+      border-top: none;
+    }
+  }
 }

@@ -1,0 +1,60 @@
+@import '../App/global';
+
+.trough-twat {
+  display: flex;
+  padding: 0.5em;
+  background-color: #25364a;
+
+  .user-icon {
+    width: 12%;
+    color: $inactive;
+    cursor: pointer;
+
+    i {
+      font-size: 47px;
+    }
+  }
+
+  .twat-content {
+    width: 100%;
+  }
+}
+
+.twat-content {
+  display: flex;
+  flex-flow: column nowrap;
+  color: $inactive;
+
+  .heading {
+    display: flex;
+    margin-top: 0.35em;
+
+    .display-name {
+      color: white;
+      font-weight: bold;
+      margin-right: 0.35em;
+    }
+
+    .menu-button {
+      margin: 0 0 0 auto;
+      i { line-height: 17px; }
+    }
+  }
+
+  .twat-text {
+    margin: 0.25em 1em 0 0;
+    color: white;
+  }
+
+  .options-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 55%;
+    margin-top: 0.8em;
+    margin-bottom: 0.25em;
+
+    i {
+      cursor: pointer;
+    }
+  }
+}
