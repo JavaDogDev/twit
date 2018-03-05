@@ -1,7 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-import './NavBar.scss';
+import TwatButton from '../misc/twat-button';
+import './nav-bar.scss';
 
 const NavBar = () => (
   <header>
@@ -20,7 +21,5 @@ const NavButton = ({ iconName, buttonText, active }) => (
     <i className="material-icons">{iconName}</i> {buttonText}
   </div>
 );
-
-const TwatButton = () => <div className="twat-button">Twat</div>;
 
 export default NavBar;
