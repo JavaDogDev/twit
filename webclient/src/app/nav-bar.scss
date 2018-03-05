@@ -1,7 +1,5 @@
-@import 'global';
-@import 'screen-sizes';
-
-$active-blue: #03A9F4;
+@import '../misc/global';
+@import '../misc/screen-sizes';
 
 header {
   width: 100%;
@@ -50,19 +48,5 @@ header {
 
   &:hover {
     color: lighten($color: $active-blue, $amount: 5%);
-  }
-}
-
-.twat-button {
-  font-weight: bold;
-  background-color: $active-blue;
-  padding: 0.525em 1.5em;
-  border-radius: 96px;
-  margin-left: auto;
-  margin-right: 0;
-  cursor: pointer;
-
-  &:hover {
-    background-color: darken($color: $active-blue, $amount: 10%);
   }
 }

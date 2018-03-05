@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './TroughTwat.scss';
+import './trough-twat.scss';
 
 const TroughTwat = ({ twat }) => (
   <div className="trough-twat">
@@ -10,10 +10,12 @@ const TroughTwat = ({ twat }) => (
 
     <div className="twat-content">
       <div className="heading">
-        <span className="display-name">{twat.user.displayName}</span>
-        <span>{twat.user.username}</span>
+        <span className="user-link">
+          <span className="display-name">{twat.user.displayName}</span>
+          <span>{twat.user.username}</span>
+        </span>
         &nbsp; &middot; &nbsp;
-        <span>2h</span>
+        <span className="relative-timestamp">2h</span>
         <div className="menu-button">
           <i className="material-icons">expand_more</i>
         </div>

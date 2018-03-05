@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 
-import NavBar from './NavBar';
-import Trough from '../Trough/Trough';
-import './App.scss';
+import NavBar from './nav-bar';
+import Trough from '../trough/trough';
+import './app.scss';
 
 // Just for development...
 const devTwats = [

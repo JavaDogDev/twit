@@ -1,16 +1,22 @@
-@import '../App/global';
+@import '../misc/global';
 
 .trough-twat {
   display: flex;
   padding: 0.5em;
   background-color: #25364a;
 
+  &:hover {
+    background-color: darken(#25364a, 10%);
+  }
+
   .user-icon {
     width: 12%;
     color: $inactive;
-    cursor: pointer;
 
-    i { font-size: 47px; }
+    i {
+      font-size: 47px;
+      cursor: pointer;
+    }
   }
 
   .twat-content {
@@ -27,14 +33,35 @@
     display: flex;
     margin-top: 0.35em;
 
+    .user-link {
+      cursor: pointer;
+
+      &:hover {
+        .display-name {
+          color: $active-blue;
+          text-decoration: underline;
+        }
+      }
+    }
+
     .display-name {
       color: white;
       font-weight: bold;
       margin-right: 0.35em;
     }
 
+    .relative-timestamp{
+      cursor: pointer;
+
+      &:hover {
+        color: $active-blue;
+        text-decoration: underline;
+      }
+    }
+
     .menu-button {
       margin: 0 0 0 auto;
+      cursor: pointer;
       i { line-height: 17px; }
     }
   }
@@ -53,15 +80,13 @@
     margin-bottom: 0.25em;
     font-size: 0.75rem;
     font-weight: bold;
+    cursor: pointer;
 
     span {
       display: inline-flex;
       align-items: center;
     }
 
-    i {
-      margin-right: 0.25em;
-      cursor: pointer;
-    }
+    i { margin-right: 0.25em; }
   }
 }
