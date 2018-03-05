@@ -1,4 +1,5 @@
 @import 'global';
+@import 'screen-sizes';
 
 $active-blue: #03A9F4;
 
@@ -7,14 +8,24 @@ header {
   height: 42px;
   background-color: #243443;
 
-  .header-items {
+  .nav-buttons {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    max-width: $main-content-max-width;
     height: 100%;
     margin: 0 auto;
+    max-width: $sm-max-content-width;
+
+    @include md {
+      max-width: $md-max-content-width;
+    }
+    @include lg {
+      max-width: $lg-max-content-width;
+    }
+    @include xl {
+      max-width: $xl-max-content-width;
+    }
   }
 }
 
@@ -26,14 +37,35 @@ header {
   height: 100%;
   padding: 0.25em 1em 0;
   color: $inactive;
+  font-weight: bold;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
 
   i.material-icons {
     margin-right: 5px;
     margin-bottom: 3px; // lines up with text better
   }
 
-  &.active {
+  &.active, &:hover {
     color: $active-blue;
     border-bottom: 2px solid $active-blue;
+  }
+
+  &:hover {
+    color: lighten($color: $active-blue, $amount: 5%);
+  }
+}
+
+.twat-button {
+  font-weight: bold;
+  background-color: $active-blue;
+  padding: 0.525em 1.5em;
+  border-radius: 96px;
+  margin-left: auto;
+  margin-right: 0;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($color: $active-blue, $amount: 10%);
   }
 }
