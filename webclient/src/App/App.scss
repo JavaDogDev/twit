@@ -33,7 +33,4 @@ main {
   @include lg {
     max-width: $lg-max-content-width;
   }
-  @include xl {
-    max-width: $xl-max-content-width;
-  }
 }

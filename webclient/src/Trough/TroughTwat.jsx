@@ -20,10 +20,10 @@ const TroughTwat = ({ twat }) => (
       </div>
       <p className="twat-text">{twat.twatText}</p>
       <div className="options-bar">
-        <i className="material-icons">reply</i>
-        <i className="material-icons">autorenew</i>
-        <i className="material-icons">favorite_border</i>
-        <i className="material-icons">message</i>
+        <span><i className="material-icons">reply</i>13</span>
+        <span><i className="material-icons">autorenew</i>37</span>
+        <span><i className="material-icons">favorite_border</i>69</span>
+        <span><i className="material-icons">message</i></span>
       </div>
     </div>
   </div>
