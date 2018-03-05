@@ -1,9 +1,11 @@
 import * as React from 'react';
+
+import TroughTwat from './TroughTwat';
 import './Trough.scss';
 
-const Trough = () => (
+const Trough = ({ twats }) => (
   <div className="trough">
-    &#47;&#47; todo
+    {twats.map(twat => <TroughTwat twat={twat} key={twat.id} />)}
   </div>
 );
 

@@ -12,9 +12,20 @@
 }
 
 main {
+  display: flex;
+  flex-flow: row nowrap;
   margin: 0 auto;
   padding-top: 10px;
   max-width: $sm-max-content-width;
+
+  .column-1, .column-3 {
+    width: 25%;
+  }
+
+  .column-2 {
+    width: 50%;
+    margin: 0 1em;
+  }
 
   @include md {
     max-width: $md-max-content-width;
