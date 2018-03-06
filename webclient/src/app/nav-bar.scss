@@ -50,3 +50,40 @@ header {
     color: lighten($color: $active-blue, $amount: 5%);
   }
 }
+
+.search-box {
+  margin: 0 0 0 auto;
+
+  input[type='text'] {
+    width: 100%;
+    line-height: 14px;
+    font-size: 0.775rem;
+    border: 2px solid #25364a;
+    border-radius: 21px;
+    padding: 8px 14px;
+    color: white;
+    background-color: darken(#25364a, 10%);
+
+    &:focus {
+      outline: none;
+      border-color: #3f73b9;
+    }
+  }
+}
+
+.settings-menu {
+  display: flex;
+  align-items: center;
+  margin: 0 15px;
+
+  i {
+    font-size: 32px;
+    color: $inactive;
+    cursor: pointer;
+  }
+}
+
+.twat-button {
+  padding: 0.525em 1.5em;
+  margin: 0 0 0 3px;
+}
