@@ -3,6 +3,7 @@
 .trough {
   display: flex;
   flex-flow: column nowrap;
+  min-width: 580px;
 
   & > * {
     width: 100%;

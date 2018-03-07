@@ -43,17 +43,9 @@ const App = () => (
     <NavBar />
 
     <main>
-      <div className="column-1">
-        &#47;&#47; User info and such
-      </div>
-
-      <div className="column-2">
-        <Trough twats={devTwats} />
-      </div>
-
-      <div className="column-3">
-        &#47;&#47; Some garbage suggestions
-      </div>
+      <div className="user-info">&#47;&#47; User info and such</div>
+      <Trough twats={devTwats} />
+      <div className="trends">&#47;&#47; trends</div>
     </main>
   </div>
 );

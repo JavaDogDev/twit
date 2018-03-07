@@ -13,7 +13,6 @@ header {
     width: 100%;
     height: 100%;
     margin: 0 auto;
-    max-width: $sm-max-content-width;
 
     @include md {
       max-width: $md-max-content-width;
