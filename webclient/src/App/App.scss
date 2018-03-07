@@ -9,28 +9,45 @@
   background-color: #141d22;
   font-size: 0.875rem;
   font-family: 'Montserrat', sans-serif;
+  min-width: 610px;
 }
 
 main {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   margin: 0 auto;
   padding-top: 10px;
-  max-width: $sm-max-content-width;
 
-  .column-1, .column-3 {
-    width: 25%;
-  }
-
-  .column-2 {
-    width: 50%;
-    margin: 0 1em;
+  .user-info, .trends {
+    display: none;
+    width: 290px;
+    height: 209px; // TODO for development only
   }
 
   @include md {
     max-width: $md-max-content-width;
+
+    .user-info, .trends {
+      display: block;
+    }
+
+    .trough {
+      width: 50%;
+      margin: 0 1em;
+    }
   }
+
   @include lg {
+    flex-flow: row nowrap;
     max-width: $lg-max-content-width;
+
+    .user-info, .trends {
+      display: block;
+    }
+
+    .trough {
+      width: 50%;
+      margin: 0 1em;
+    }
   }
 }
