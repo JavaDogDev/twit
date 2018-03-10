@@ -3,7 +3,7 @@
 .trough-twat {
   display: flex;
   padding: 0.5em;
-  background-color: #25364a;
+  background-color: $secondary-blue;
 
   &:hover {
     background-color: darken(#25364a, 10%);
