@@ -15,6 +15,7 @@
 main {
   display: flex;
   flex-flow: row wrap;
+  align-items: flex-start;
   margin: 0 auto;
   padding-top: 10px;
 
@@ -47,6 +48,78 @@ main {
     .trough {
       width: 50%;
       margin: 0 1em;
+    }
+  }
+}
+
+.user-info {
+  border: 1px solid black;
+  background-color: $secondary-blue;
+
+  i {
+    color: $inactive;
+    font-size: 61px;
+    cursor: pointer;
+    margin-top: -44px;
+    margin-right: 16px;
+  }
+
+  .header-image {
+    padding: 1em;
+    height: 75px;
+    background-color: $active-blue;
+  }
+
+  .user-info-contents {
+    padding: 1em;
+
+    & > div:first-child {
+      display: flex;
+    }
+  }
+
+  .display-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .username {
+    color: $inactive;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .user-stats {
+    display: flex;
+    margin-top: 1.2em;
+    color: $inactive;
+  }
+
+  .user-stats-column {
+    width: 50%;
+    cursor: pointer;
+
+    &:hover {
+      color: $active-blue;
+    }
+
+    & > div:first-child {
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    & > div:nth-child(2) {
+      color: $active-blue;
+      font-size: 1.15rem;
+      font-weight: bold;
     }
   }
 }
