@@ -32,6 +32,12 @@ module.exports = {
         include: [path.resolve(__dirname, 'webclient/src')],
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
+      {
+        // Compile SCSS into CSS and allow requiring from JS files
+        test: /\.css$/,
+        include: [path.resolve(__dirname, 'node_modules/react-router-modal/css')],
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
 

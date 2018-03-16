@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import TroughTwat from './trough-twat';
-import TwatButton from '../misc/twat-button';
 import './trough.scss';
 
 const Trough = ({ twats }) => (
@@ -17,7 +16,7 @@ const TwitComposerInline = () => (
       <i className="material-icons">face</i>
     </div>
     <input type="text" placeholder="Don't think, just type." />
-    <TwatButton />
+    <div className="twat-button">Twat</div>
   </div>
 );
 

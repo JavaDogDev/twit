@@ -82,7 +82,11 @@ header {
   }
 }
 
-.twat-button {
-  padding: 0.525em 1.5em;
-  margin: 0 0 0 3px;
+.twat-button-link {
+  color: white;
+  text-decoration: none;
+
+  .twat-button {
+    margin: 0 0 0 3px;
+  }
 }
