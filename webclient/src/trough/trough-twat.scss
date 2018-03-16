@@ -6,7 +6,7 @@
   background-color: $secondary-blue;
 
   &:hover {
-    background-color: darken(#25364a, 10%);
+    background-color: darken($secondary-blue, 10%);
   }
 
   .user-icon {

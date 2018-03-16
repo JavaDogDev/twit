@@ -1,10 +1,10 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 
-import TwatButton from '../misc/twat-button';
 import './nav-bar.scss';
 
-const NavBar = () => (
+const NavBar = ({ showModalTwatComposer }) => (
   <header>
     <div className="nav-buttons">
       <NavButton active iconName="home" buttonText="Home" />
@@ -13,7 +13,15 @@ const NavBar = () => (
 
       <SearchBox />
       <SettingsMenu />
-      <TwatButton />
+      <div
+        className="twat-button"
+        role="button"
+        tabIndex={0}
+        onClick={showModalTwatComposer}
+        onKeyUp={showModalTwatComposer}
+      >
+        Twat
+      </div>
     </div>
   </header>
 );
