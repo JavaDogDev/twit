@@ -63,7 +63,29 @@ class App extends React.Component {
         <NavBar showModalTwatComposer={this.showModalTwatComposer} />
 
         <main>
-          <div className="user-info primary">&#47;&#47; User info and such</div>
+          <div className="user-info">
+            <div className="header-image" />
+
+            <div className="user-info-contents">
+              <div>
+                <i className="material-icons">face</i>
+                <div>
+                  <div className="display-name">Display Name</div>
+                  <div className="username">@username</div>
+                </div>
+              </div>
+              <div className="user-stats">
+                <div className="user-stats-column">
+                  <div>Twats</div>
+                  <div>45</div>
+                </div>
+                <div className="user-stats-column">
+                  <div>Following</div>
+                  <div>954</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <Trough twats={devTwats} />
 
