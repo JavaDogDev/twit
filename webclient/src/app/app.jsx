@@ -6,10 +6,11 @@ import 'react-router-modal/css/react-router-modal.css';
 import NavBar from './nav-bar';
 import Trough from '../trough/trough';
 import ModalTwatComposer from '../misc/modal-twat-composer';
+import ModalTwat from '../misc/modal-twat';
 import './app.scss';
 
 // Just for development...
-const devTwats = [
+export const devTwats = [
   {
     id: '54325432',
     timestamp: '',
@@ -116,8 +117,10 @@ class App extends React.Component {
             hideModalTwatComposer={this.hideModalTwatComposer}
           />
 
-          <ModalContainer />
+          <ModalTwat />
         </main>
+
+        <ModalContainer />
       </div>
     );
   }

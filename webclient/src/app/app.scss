@@ -10,6 +10,11 @@
   font-size: 0.875rem;
   font-family: 'Montserrat', sans-serif;
   min-width: $min-page-width;
+
+  .wrapper {
+    position: relative;
+    height: 100%;
+  }
 }
 
 main {

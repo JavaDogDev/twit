@@ -1,21 +1,24 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
-import './trough-twat.scss';
+import './list-twat.scss';
 
-const TroughTwat = ({ twat }) => (
-  <div className="trough-twat">
+const ListTwat = ({ twat }) => (
+  <div className="list-twat">
     <div className="user-icon">
       <i className="material-icons">face</i>
     </div>
 
-    <div className="twat-content">
+    <div className="list-twat-content">
       <div className="heading">
         <span className="user-link">
           <span className="display-name">{twat.user.displayName}</span>
           <span>{twat.user.username}</span>
         </span>
         &nbsp; &middot; &nbsp;
-        <span className="relative-timestamp">2h</span>
+        <Link to="/PATH-FOR-DEV-ONLY" style={{ textDecoration: 'none' }}>
+          <span className="relative-timestamp">2h</span>
+        </Link>
         <div className="menu-button">
           <i className="material-icons">expand_more</i>
         </div>
@@ -31,4 +34,4 @@ const TroughTwat = ({ twat }) => (
   </div>
 );
 
-export default TroughTwat;
+export default ListTwat;
