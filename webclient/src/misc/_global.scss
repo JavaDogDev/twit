@@ -26,3 +26,14 @@ $secondary-blue: #25364a;
     background-color: darken($color: $active-blue, $amount: 10%);
   }
 }
+
+.react-router-modal__container {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
+  overflow-y: scroll;
+}
+
+.react-router-modal__modal {
+  transform: translate(-50%, 0);
+}

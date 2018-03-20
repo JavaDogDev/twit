@@ -1,6 +1,6 @@
 @import '../misc/global';
 
-.trough-twat {
+.list-twat {
   display: flex;
   padding: 0.5em;
   background-color: $secondary-blue;
@@ -19,12 +19,12 @@
     }
   }
 
-  .twat-content {
+  .list-twat-content {
     width: 100%;
   }
 }
 
-.twat-content {
+.list-twat-content {
   display: flex;
   flex-flow: column nowrap;
   color: $inactive;
@@ -32,6 +32,7 @@
   .heading {
     display: flex;
     margin-top: 0.35em;
+    font-size: 0.875rem;
 
     .user-link {
       cursor: pointer;
@@ -50,7 +51,9 @@
       margin-right: 0.35em;
     }
 
-    .relative-timestamp{
+    .relative-timestamp {
+      color: $inactive;
+      text-decoration: none;
       cursor: pointer;
 
       &:hover {
@@ -69,6 +72,7 @@
   .twat-text {
     margin: 0.25em 1em 0 0;
     line-height: 1.35em;
+    font-size: 0.875rem;
     color: white;
   }
 

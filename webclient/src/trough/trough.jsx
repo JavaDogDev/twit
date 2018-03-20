@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import TroughTwat from './trough-twat';
+import ListTwat from '../misc/list-twat';
 import './trough.scss';
 
 const Trough = ({ twats }) => (
   <div className="trough">
     <TwitComposerInline />
-    {twats.map(twat => <TroughTwat twat={twat} key={twat.id} />)}
+    {twats.map(twat => <ListTwat twat={twat} key={twat.id} />)}
   </div>
 );
 
