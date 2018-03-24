@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const User = require('../database/user');
 
 const loginRouter = express.Router();
-loginRouter.use(bodyParser.json());
+loginRouter.use(bodyParser.urlencoded());
 
 loginRouter.post('/', (req, res) => {
   const { username, password } = req.body;
