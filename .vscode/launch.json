@@ -10,9 +10,22 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "linux start",
+      "program": "${workspaceFolder}/server/twit-server.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "build and start",
       "preLaunchTask": "build",
       "program": "${workspaceFolder}\\server\\twit-server.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "linux build and start",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/server/twit-server.js"
     }
   ]
 }
