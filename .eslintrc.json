@@ -7,6 +7,7 @@
   "rules": {
     "react/prop-types": "skipUndeclared",
     "function-paren-newline": "off",
+    "consistent-return": "off",
     "no-console": "off",
     "jsx-a11y/anchor-is-valid": [ "error", {
       "components": [],

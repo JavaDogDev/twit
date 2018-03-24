@@ -4,6 +4,12 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "start",
+      "program": "${workspaceFolder}\\server\\twit-server.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "build and start",
       "preLaunchTask": "build",
       "program": "${workspaceFolder}\\server\\twit-server.js"
