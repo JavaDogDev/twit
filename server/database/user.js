@@ -34,7 +34,7 @@ function createUserModel() {
 
   userSchema.methods.comparePassword = function compare(candidatePassword, callback) {
     bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-      if (err) return callback(err);
+      if (err) { return callback(err); }
       callback(null, isMatch);
     });
   };
@@ -42,4 +42,6 @@ function createUserModel() {
   return mongoose.model('User', userSchema);
 }
 
-module.exports = { createUserModel };
+const User = createUserModel();
+
+module.exports = User;
