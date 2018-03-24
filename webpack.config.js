@@ -1,8 +1,11 @@
 const path = require('path');
+const convert = require('koa-connect');
+const history = require('connect-history-api-fallback');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
+  target: 'node',
 
   entry: [
     'babel-polyfill',
@@ -30,7 +33,11 @@ module.exports = {
         // Compile SCSS into CSS and allow requiring from JS files
         test: /\.scss$/,
         include: [path.resolve(__dirname, 'webclient/src')],
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          { loader: 'sass-loader', options: {/* outputStyle: 'compressed' */} },
+        ],
       },
       {
         // Compile SCSS into CSS and allow requiring from JS files
@@ -47,3 +54,16 @@ module.exports = {
     ]),
   ],
 };
+
+/*
+  // Have webpack-serve return index.html for any path
+  module.exports.serve = {
+    content: [__dirname],
+    add: (app) => {
+      const historyOptions = {
+        index: '/index.html',
+      };
+      app.use(convert(history(historyOptions)));
+    },
+  };\
+*/
