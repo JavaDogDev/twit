@@ -6,3 +6,6 @@ webclient/dist/
 
 # Dependencies
 node_modules/
+
+# Local Dev DB Data
+mongodb-data/
