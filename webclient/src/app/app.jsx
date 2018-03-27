@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { hot } from 'react-hot-loader';
 
 import Login from './login';
 import Dashboard from './dashboard';
@@ -47,4 +46,4 @@ const App = () => (
   </Switch>
 );
 
-export default hot(module)(App);
+export default App;
