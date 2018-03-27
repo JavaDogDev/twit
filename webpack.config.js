@@ -1,6 +1,4 @@
 const path = require('path');
-const convert = require('koa-connect');
-const history = require('connect-history-api-fallback');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -54,16 +52,3 @@ module.exports = {
     ]),
   ],
 };
-
-/*
-  // Have webpack-serve return index.html for any path
-  module.exports.serve = {
-    content: [__dirname],
-    add: (app) => {
-      const historyOptions = {
-        index: '/index.html',
-      };
-      app.use(convert(history(historyOptions)));
-    },
-  };\
-*/

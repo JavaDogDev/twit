@@ -29,6 +29,7 @@ loginRouter.post('/', (req, res) => {
 
       if (isMatch) {
         console.log(`User successfully logged in: ${username}`);
+        req.session.userId = user.userId;
         return res.redirect('/');
       }
 
