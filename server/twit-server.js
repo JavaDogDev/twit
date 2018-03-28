@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const verifyAuthentication = require('./verify-authentication');
 const loginRouter = require('./api/login');
+const twatRouter = require('./api/twats');
 
 const app = express();
 
@@ -22,24 +24,17 @@ const app = express();
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
   }));
 
-  /* API endpoints */
+  /* Unauthenticated API endpoints */
   app.use('/api/login', loginRouter);
 
   /* Host static files from /dist */
   app.use('/dist', express.static(path.join(__dirname, '../webclient/dist')));
 
   /* Kick to login if not authenticated */
-  app.use((req, res, next) => {
-    // Check whether userId exists in session
-    if (
-      typeof req.session.userId !== 'string'
-      && req.originalUrl !== '/login'
-      && !req.originalUrl.startsWith('/dist/')
-    ) {
-      return res.redirect('/login');
-    }
-    return next();
-  });
+  app.use(verifyAuthentication);
+
+  /* Authenticated API endpoints */
+  app.use('/api/twat', twatRouter);
 
   // If no other route matches, send GET requests to index.html
   app.get('/*', (req, res) => res.sendFile(
