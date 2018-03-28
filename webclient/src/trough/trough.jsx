@@ -7,6 +7,11 @@ const Trough = ({ twats }) => (
   <div className="trough">
     <TwitComposerInline />
     {twats.map(twat => <ListTwat twat={twat} key={twat.id} />)}
+    {twats.map(twat => <ListTwat twat={twat} key={twat.id + 'a'} />)}
+    {twats.map(twat => <ListTwat twat={twat} key={twat.id + 'b'} />)}
+    {twats.map(twat => <ListTwat twat={twat} key={twat.id + 'c'} />)}
+    {twats.map(twat => <ListTwat twat={twat} key={twat.id + 'd'} />)}
+    {twats.map(twat => <ListTwat twat={twat} key={twat.id + 'e'} />)}
   </div>
 );
 

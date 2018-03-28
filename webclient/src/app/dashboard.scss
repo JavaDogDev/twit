@@ -2,12 +2,23 @@
 @import '../misc/screen-sizes';
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
+.dashboard-wrapper {
+  height: 100vh;
+}
+
+.dashboard-wrapper > header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 .dashboard-wrapper > main {
   display: flex;
   flex-flow: row wrap;
   align-items: flex-start;
   margin: 0 auto;
-  padding-top: 10px;
+  padding: 52px 0;
 
   .user-info, .trends {
     display: none;
