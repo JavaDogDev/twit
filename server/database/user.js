@@ -9,6 +9,7 @@ function createUserModel() {
     username: { type: String, required: true },
     displayName: { type: String, required: true },
     password: { type: String, required: true },
+    following: [String],
   });
 
   userSchema.pre('save', function encryptPasswords(next) {

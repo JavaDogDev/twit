@@ -7,7 +7,6 @@ import Trough from '../trough/trough';
 import ModalTwatComposer from '../misc/modal-twat-composer';
 import ModalTwat from '../misc/modal-twat';
 import './dashboard.scss';
-import { devTwats } from './app';
 
 class Dashboard extends React.Component {
   constructor() {
@@ -55,7 +54,7 @@ class Dashboard extends React.Component {
             </div>
           </div>
 
-          <Trough twats={devTwats} />
+          <Trough twats={[]} />
 
           <div className="trends">
             <h3>Trends for you</h3>
