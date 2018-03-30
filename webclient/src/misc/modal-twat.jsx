@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ModalRoute } from 'react-router-modal';
 
-import { devTwats } from '../app/app';
 import ListTwat from './list-twat';
 import './modal-twat.scss';
 
@@ -49,11 +48,7 @@ const ModalTwat = () => (
         <div className="twat-button">Twat</div>
       </div>
 
-      {devTwats.map(twat => <ListTwat twat={twat} key={twat.id} />)}
-      {devTwats.map(twat => <ListTwat twat={twat} key={twat.id + "a"} />)}
-      {devTwats.map(twat => <ListTwat twat={twat} key={twat.id + "b"} />)}
-      {devTwats.map(twat => <ListTwat twat={twat} key={twat.id + "c"} />)}
-      {devTwats.map(twat => <ListTwat twat={twat} key={twat.id + "d"} />)}
+      {/* twats go here */}
     </div>
   </ModalRoute>
 );

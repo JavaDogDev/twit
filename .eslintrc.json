@@ -9,6 +9,7 @@
     "function-paren-newline": "off",
     "consistent-return": "off",
     "no-console": "off",
+    "no-underscore-dangle": "off",
     "jsx-a11y/anchor-is-valid": [ "error", {
       "components": [],
       "specialLink": [ "hrefLeft", "hrefRight" ],

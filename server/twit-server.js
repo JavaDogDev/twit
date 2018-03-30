@@ -34,7 +34,7 @@ const app = express();
   app.use(verifyAuthentication);
 
   /* Authenticated API endpoints */
-  app.use('/api/twat', twatRouter);
+  app.use('/api/twats', twatRouter);
 
   // If no other route matches, send GET requests to index.html
   app.get('/*', (req, res) => res.sendFile(

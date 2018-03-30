@@ -33,6 +33,7 @@
     "webpack-cli": "^2.0.13"
   },
   "dependencies": {
+    "array-flatten": "^2.1.1",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
