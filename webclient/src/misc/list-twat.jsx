@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
+import timeSince from './time-since';
 import './list-twat.scss';
 
 const ListTwat = ({ twat }) => (
@@ -17,7 +18,7 @@ const ListTwat = ({ twat }) => (
         </span>
         &nbsp; &middot; &nbsp;
         <Link to="/PATH-FOR-DEV-ONLY" style={{ textDecoration: 'none' }}>
-          <span className="relative-timestamp">2h</span>
+          <span className="relative-timestamp">{timeSince(new Date(twat.timestamp))}</span>
         </Link>
         <div className="menu-button">
           <i className="material-icons">expand_more</i>
