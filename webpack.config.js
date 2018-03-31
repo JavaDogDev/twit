@@ -38,7 +38,7 @@ module.exports = {
         ],
       },
       {
-        // Compile SCSS into CSS and allow requiring from JS files
+        // Just for CSS bundled with particular libraries
         test: /\.css$/,
         include: [path.resolve(__dirname, 'node_modules/react-router-modal/css')],
         use: ['style-loader', 'css-loader'],
@@ -49,6 +49,7 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       { from: './webclient/src/*.html', flatten: true },
+      { from: './webclient/src/img/*', to: 'img/', flatten: true },
     ]),
   ],
 };

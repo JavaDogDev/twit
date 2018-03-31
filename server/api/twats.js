@@ -58,11 +58,33 @@ twatsRouter.get('/following', async (req, res) => {
     return res.json({ twats: [] });
   }
 
-  Promise.all(followedUserIds.map(Twat.twatsByUser.bind(Twat)))
-    .then((receivedTwats) => {
+  // Make two arrays of promises
+  const followedUsers = Promise.all(followedUserIds.map(userId => User.find({ userId }).exec()));
+  const followedUsersTwats = Promise.all(followedUserIds.map(Twat.twatsByUser.bind(Twat)));
+
+  Promise.all([followedUsers, followedUsersTwats])
+    .then(([foundUsers, foundTwats]) => {
       // Flatten [ [user 1 twats...], [user 2 twats...] ] to [ allTwats... ]
-      const twats = flatten(receivedTwats);
-      res.json({ twats });
+      const flattenedTwats = flatten(foundTwats);
+      const flattenedUsers = flatten(foundUsers);
+
+      // Embed user data into every returned Twat
+      const responseTwats = [];
+      flattenedTwats.forEach((twat) => {
+        const twatClone = { ...twat.toObject() }; // toObject gets actual _doc
+
+        flattenedUsers.forEach((user) => {
+          // Embed only public-api-safe user data
+          if (user.userId === twatClone.userId) twatClone.user = user.getPublicInfo();
+        });
+
+        // Delete userId prop because I think I want it to remain server-side only...?
+        delete twatClone.userId;
+
+        responseTwats.push(twatClone);
+      });
+
+      res.json({ twats: responseTwats });
     })
     .catch(err => console.error(`Error loading Twats from followed users: ${err}`));
 });

@@ -6,7 +6,7 @@ const SALT_WORK_FACTOR = 10;
 function createUserModel() {
   const userSchema = mongoose.Schema({
     userId: { type: String, required: true, index: { unique: true } },
-    username: { type: String, required: true },
+    username: { type: String, required: true, unique: true },
     displayName: { type: String, required: true },
     password: { type: String, required: true },
     following: [String],
@@ -38,6 +38,17 @@ function createUserModel() {
       if (err) { return callback(err); }
       callback(null, isMatch);
     });
+  };
+
+  /**
+   * @ returns User fields which are safe to expose to the webclient
+   */
+  userSchema.methods.getPublicInfo = function getPublicInfo() {
+    return {
+      username: this.username,
+      displayName: this.displayName,
+      following: this.following,
+    };
   };
 
   return mongoose.model('User', userSchema);

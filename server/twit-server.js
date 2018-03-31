@@ -2,6 +2,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const express = require('express');
 const session = require('express-session');
+const compression = require('compression');
 const MongoStore = require('connect-mongo')(session);
 const verifyAuthentication = require('./verify-authentication');
 const loginRouter = require('./api/login');
@@ -23,6 +24,9 @@ const app = express();
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
   }));
+
+  /* Compress responses with gzip */
+  app.use(compression());
 
   /* Unauthenticated API endpoints */
   app.use('/api/login', loginRouter);

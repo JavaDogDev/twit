@@ -13,7 +13,7 @@ const ListTwat = ({ twat }) => (
       <div className="heading">
         <span className="user-link">
           <span className="display-name">{twat.user.displayName}</span>
-          <span>{twat.user.username}</span>
+          <span>@{twat.user.username}</span>
         </span>
         &nbsp; &middot; &nbsp;
         <Link to="/PATH-FOR-DEV-ONLY" style={{ textDecoration: 'none' }}>
@@ -25,9 +25,9 @@ const ListTwat = ({ twat }) => (
       </div>
       <p className="twat-text">{twat.twatText}</p>
       <div className="options-bar">
-        <span><i className="material-icons">reply</i>13</span>
-        <span><i className="material-icons">autorenew</i>37</span>
-        <span><i className="material-icons">favorite_border</i>69</span>
+        <span><i className="material-icons">reply</i>0</span>
+        <span><i className="material-icons">autorenew</i>{twat.meta.retwats}</span>
+        <span><i className="material-icons">favorite_border</i>{twat.meta.likes}</span>
         <span><i className="material-icons">message</i></span>
       </div>
     </div>
