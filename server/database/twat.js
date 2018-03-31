@@ -14,7 +14,7 @@ function createTwatModel() {
    * @returns a Promise which evaluates to an array of the user's Twats
    */
   twatSchema.statics.twatsByUser = function twatsByUser(userId) {
-    return this.where({ userId });
+    return this.where({ userId }).exec();
   };
 
   return mongoose.model('Twat', twatSchema);

@@ -54,7 +54,7 @@ class Dashboard extends React.Component {
             </div>
           </div>
 
-          <Trough twats={[]} />
+          <Trough />
 
           <div className="trends">
             <h3>Trends for you</h3>
