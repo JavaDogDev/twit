@@ -11,7 +11,6 @@ twatsRouter.use(bodyParser.json());
 twatsRouter.post('/', (req, res) => {
   const newTwat = new Twat({
     twatText: req.body.twatText,
-    meta: { likes: 0, retwats: 0 },
     userId: req.session.userId,
   });
 
@@ -49,31 +48,33 @@ twatsRouter.delete('/:id', async (req, res) => {
   Returns JSON object: { twats: [] }
 */
 twatsRouter.get('/following', async (req, res) => {
-  const followedUserIds = await User.find({ userId: req.session.userId })
-    .then(users => users.map(user => user.following))
-    .catch(err => console.error(`Couldn't get followed users: ${err}`));
+  let followedUserIds = [];
+  try {
+    followedUserIds = (await User.findOne({ userId: req.session.userId }).exec()).following;
+  } catch (err) {
+    console.error(`Couldn't get followed users: ${err}`);
+  }
 
   // Not following anyone!
-  if (!Array.isArray(followedUserIds) || followedUserIds.length === 0) {
+  if (followedUserIds.length === 0) {
     return res.json({ twats: [] });
   }
 
   // Make two arrays of promises
-  const followedUsers = Promise.all(followedUserIds.map(userId => User.find({ userId }).exec()));
+  const followedUsers = Promise.all(followedUserIds.map(userId => User.findOne({ userId }).exec()));
   const followedUsersTwats = Promise.all(followedUserIds.map(Twat.twatsByUser.bind(Twat)));
 
   Promise.all([followedUsers, followedUsersTwats])
     .then(([foundUsers, foundTwats]) => {
       // Flatten [ [user 1 twats...], [user 2 twats...] ] to [ allTwats... ]
       const flattenedTwats = flatten(foundTwats);
-      const flattenedUsers = flatten(foundUsers);
 
       // Embed user data into every returned Twat
       const responseTwats = [];
       flattenedTwats.forEach((twat) => {
         const twatClone = { ...twat.toObject() }; // toObject gets actual _doc
 
-        flattenedUsers.forEach((user) => {
+        foundUsers.forEach((user) => {
           // Embed only public-api-safe user data
           if (user.userId === twatClone.userId) twatClone.user = user.getPublicInfo();
         });
@@ -87,6 +88,33 @@ twatsRouter.get('/following', async (req, res) => {
       res.json({ twats: responseTwats });
     })
     .catch(err => console.error(`Error loading Twats from followed users: ${err}`));
+});
+
+/* Return a Twat */
+twatsRouter.get('/:id', async (req, res) => {
+  try {
+    const twat = await Twat.findById(req.params.id).exec();
+    if (twat === null) {
+      console.error(`Error finding a Twat with ID '${req.params.id}'`);
+      return res.status(404).end();
+    }
+
+    const user = await User.findOne({ userId: twat.userId }).exec();
+    if (user === null) {
+      console.error(`Error finding user with ID: ${twat.userId}`);
+      return res.status(404).end();
+    }
+
+    // Embed user data into Twat
+    const responseTwat = { ...twat.toObject() };
+    responseTwat.user = user.getPublicInfo();
+    delete responseTwat.userId;
+
+    res.json({ twat: responseTwat });
+  } catch (err) {
+    console.error(`Error getting Twat with ID '${req.params.id}'\n${err}`);
+    res.status(400).end();
+  }
 });
 
 module.exports = twatsRouter;
