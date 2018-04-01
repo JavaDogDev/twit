@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ModalContainer } from 'react-router-modal';
+import { ModalContainer, ModalRoute } from 'react-router-modal';
 import 'react-router-modal/css/react-router-modal.css';
 
 import NavBar from './nav-bar';
@@ -11,17 +11,17 @@ import './dashboard.scss';
 class Dashboard extends React.Component {
   constructor() {
     super();
-    this.state = { twatModalOpen: false };
+    this.state = { twatComposerOpen: false };
     this.hideModalTwatComposer = this.hideModalTwatComposer.bind(this);
     this.showModalTwatComposer = this.showModalTwatComposer.bind(this);
   }
 
   hideModalTwatComposer() {
-    this.setState({ twatModalOpen: false });
+    this.setState({ twatComposerOpen: false });
   }
 
   showModalTwatComposer() {
-    this.setState({ twatModalOpen: true });
+    this.setState({ twatComposerOpen: true });
   }
 
   render() {
@@ -79,11 +79,17 @@ class Dashboard extends React.Component {
           </div>
 
           <ModalTwatComposer
-            visible={this.state.twatModalOpen}
+            visible={this.state.twatComposerOpen}
             hideModalTwatComposer={this.hideModalTwatComposer}
           />
 
-          <ModalTwat />
+          <ModalRoute
+            exact
+            path="/twat/:twatId"
+            parentPath={this.props.match.url}
+            className="react-router-modal__modal modal-twat"
+            component={ModalTwat}
+          />
         </main>
 
         <ModalContainer />

@@ -17,7 +17,7 @@ const ListTwat = ({ twat }) => (
           <span>@{twat.user.username}</span>
         </span>
         &nbsp; &middot; &nbsp;
-        <Link to="/PATH-FOR-DEV-ONLY" style={{ textDecoration: 'none' }}>
+        <Link to={`/twat/${twat._id}`} style={{ textDecoration: 'none' }}>
           <span className="relative-timestamp">{timeSince(new Date(twat.timestamp))}</span>
         </Link>
         <div className="menu-button">

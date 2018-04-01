@@ -160,3 +160,18 @@ $modal-border-radius: 6px;
     }
   }
 }
+
+.modal-twat-loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: $secondary-blue;
+  border-radius: 8px;
+
+  img {
+    width: 30px;
+    height: 30px;
+    margin: 3em;
+  }
+}

@@ -47,7 +47,6 @@ function createUserModel() {
     return {
       username: this.username,
       displayName: this.displayName,
-      following: this.following,
     };
   };
 

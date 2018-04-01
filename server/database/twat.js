@@ -5,9 +5,12 @@ function createTwatModel() {
     // twats use Mongo's _id as identifiers
     timestamp: { type: Date, default: Date.now(), required: true },
     twatText: { type: String, required: true },
-    meta: { likes: 0, retwats: 0 },
+    meta: {
+      likes: { type: Number, default: 0 },
+      retwats: { type: Number, default: 0 },
+    },
     userId: { type: String, required: true, index: true },
-    replies: { type: [mongoose.Schema.Types.ObjectId], required: true },
+    replies: { type: [mongoose.Schema.Types.ObjectId], ref: 'Twat', required: true },
   });
 
   /**
