@@ -8,19 +8,44 @@ import './trough.scss';
 class Trough extends React.Component {
   constructor() {
     super();
-    this.state = { showSpinner: true, twats: [] };
+    this.state = { showSpinner: true, twats: [], composerText: '' };
+    this.handleComposerInput = this.handleComposerInput.bind(this);
+    this.submitNewTwat = this.submitNewTwat.bind(this);
+    this.refreshTrough = this.refreshTrough.bind(this);
   }
 
   componentDidMount() {
-    axios.get('/api/twats/following')
-      .then(res => this.setState({ showSpinner: false, twats: res.data.twats }))
+    this.refreshTrough();
+  }
+
+  refreshTrough() {
+    axios.get('/api/twats/trough')
+      .then(res => this.setState({
+        showSpinner: false,
+        twats: res.data.twats.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)),
+        composerText: '',
+      }))
       .catch(err => console.log(`Error getting Twats from followed users: ${err}`));
+  }
+
+  submitNewTwat() {
+    const twatText = this.state.composerText;
+    axios.post('/api/twats', { twatText })
+      .then(this.refreshTrough)
+      .catch(err => console.error(`Error submitting new Twat: ${err}`));
+  }
+
+  handleComposerInput(event) {
+    this.setState({ composerText: event.target.value });
   }
 
   render() {
     return (
       <div className="trough">
-        <TwitComposerInline />
+        <TwatComposerInline
+          submitNewTwat={this.submitNewTwat}
+          handleComposerInput={this.handleComposerInput}
+        />
         {this.state.showSpinner ? <TroughLoadingSpinner /> : null}
         {this.state.twats.map(twat => <ListTwat twat={twat} key={twat._id} />)}
       </div>
@@ -28,13 +53,23 @@ class Trough extends React.Component {
   }
 }
 
-const TwitComposerInline = () => (
-  <div className="twit-composer-inline">
+const TwatComposerInline = ({ submitNewTwat, handleComposerInput }) => (
+  <div className="twat-composer-inline">
     <div className="user-icon">
       <i className="material-icons">face</i>
     </div>
-    <input type="text" placeholder="Don't think, just type." />
-    <div className="twat-button">Twat</div>
+    <input
+      type="text"
+      placeholder="Don't think, just type."
+      onChange={handleComposerInput}
+    />
+    <button
+      className="twat-button"
+      tabIndex={0}
+      onClick={submitNewTwat}
+    >
+      Twat
+    </button>
   </div>
 );
 

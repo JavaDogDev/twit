@@ -54,7 +54,7 @@ class ModalTwat extends React.Component {
           </div>
 
           <div className="datetime">
-            {moment(twat.timestamp).format('h:mm - D MMM YYYY')}
+            {moment(twat.timestamp).format('h:mma - D MMM YYYY')}
           </div>
 
           <div className="options-bar">

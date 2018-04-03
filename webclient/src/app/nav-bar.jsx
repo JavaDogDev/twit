@@ -1,6 +1,5 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 
 import './nav-bar.scss';
 
@@ -18,7 +17,6 @@ const NavBar = ({ showModalTwatComposer }) => (
         role="button"
         tabIndex={0}
         onClick={showModalTwatComposer}
-        onKeyUp={showModalTwatComposer}
       >
         Twat
       </div>

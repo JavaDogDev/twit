@@ -47,7 +47,7 @@ twatsRouter.delete('/:id', async (req, res) => {
   Get twats from followed users
   Returns JSON object: { twats: [] }
 */
-twatsRouter.get('/following', async (req, res) => {
+twatsRouter.get('/trough', async (req, res) => {
   let followedUserIds = [];
   try {
     followedUserIds = (await User.findOne({ userId: req.session.userId }).exec()).following;
@@ -60,14 +60,21 @@ twatsRouter.get('/following', async (req, res) => {
     return res.json({ twats: [] });
   }
 
-  // Make two arrays of promises
   const followedUsers = Promise.all(followedUserIds.map(userId => User.findOne({ userId }).exec()));
   const followedUsersTwats = Promise.all(followedUserIds.map(Twat.twatsByUser.bind(Twat)));
+  const currentUser = User.findOne({ userId: req.session.userId });
+  const currentUserTwats = Twat.twatsByUser(req.session.userId);
 
-  Promise.all([followedUsers, followedUsersTwats])
-    .then(([foundUsers, foundTwats]) => {
+  Promise.all([followedUsers, followedUsersTwats, currentUser, currentUserTwats])
+    .then(([foundUsers, foundTwats, thisUser, ownTwats]) => {
       // Flatten [ [user 1 twats...], [user 2 twats...] ] to [ allTwats... ]
       const flattenedTwats = flatten(foundTwats);
+
+      // Add in the current user's Twats
+      flattenedTwats.push(...ownTwats);
+
+      // and add the current user's info to foundUsers for simplicity below...
+      foundUsers.push(thisUser);
 
       // Embed user data into every returned Twat
       const responseTwats = [];
