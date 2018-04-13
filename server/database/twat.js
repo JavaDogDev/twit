@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 function createTwatModel() {
   const twatSchema = mongoose.Schema({
     // twats use Mongo's _id as identifiers
-    timestamp: { type: Date, default: Date.now(), required: true },
+    timestamp: { type: Date, default: () => Date.now(), required: true },
     twatText: { type: String, required: true },
     meta: {
       likes: { type: Number, default: 0 },
