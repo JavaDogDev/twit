@@ -55,11 +55,6 @@ twatsRouter.get('/trough', async (req, res) => {
     console.error(`Couldn't get followed users: ${err}`);
   }
 
-  // Not following anyone!
-  if (followedUserIds.length === 0) {
-    return res.json({ twats: [] });
-  }
-
   const followedUsers = Promise.all(followedUserIds.map(userId => User.findOne({ userId }).exec()));
   const followedUsersTwats = Promise.all(followedUserIds.map(Twat.twatsByUser.bind(Twat)));
   const currentUser = User.findOne({ userId: req.session.userId });
