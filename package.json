@@ -8,9 +8,9 @@
     "start": "node ./server/twit-server.js",
     "build": "webpack --display-error-details",
     "start-database": "mongod --dbpath=mongodb-data",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Got no tests yet bro\" && exit 1"
   },
-  "author": "cjmoran",
+  "author": "Summit",
   "license": "UNLICENSED",
   "private": true,
   "devDependencies": {
@@ -47,7 +47,11 @@
     "mongoose": "^5.0.11",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
-    "react-router-modal": "^1.3.2"
+    "react-router-modal": "^1.3.2",
+    "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-thunk": "^2.2.0"
   }
 }
