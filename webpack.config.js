@@ -1,8 +1,10 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const PRODUCTION = false;
+
 module.exports = {
-  mode: 'development',
+  mode: PRODUCTION ? 'production' : 'development',
   target: 'node',
 
   entry: [
@@ -34,7 +36,7 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
-          { loader: 'sass-loader', options: {/* outputStyle: 'compressed' */} },
+          { loader: 'sass-loader', options: { outputStyle: PRODUCTION ? 'compressed' : null } },
         ],
       },
       {
@@ -52,4 +54,7 @@ module.exports = {
       { from: './webclient/src/img/*', to: 'img/', flatten: true },
     ]),
   ],
+
+  // Disable stupid "oh no app > 244 KiB" warning
+  performance: { hints: false },
 };
