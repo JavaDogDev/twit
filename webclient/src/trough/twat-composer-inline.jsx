@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
+import { refreshTroughAsync } from '../action-creators/trough-actions';
 import './twat-composer-inline.scss';
 
 class TwatComposerInline extends React.Component {
@@ -19,7 +21,7 @@ class TwatComposerInline extends React.Component {
     const twatText = this.state.composerText;
     axios.post('/api/twats', { twatText })
       .then(() => { this.setState({ composerText: '' }); })
-      .then(this.props.refreshTrough)
+      .then(this.props.dispatch(refreshTroughAsync()))
       .catch(err => console.error(`Error submitting new Twat: ${err}`));
   }
 
@@ -47,4 +49,4 @@ class TwatComposerInline extends React.Component {
   }
 }
 
-export default TwatComposerInline;
+export default connect()(TwatComposerInline);

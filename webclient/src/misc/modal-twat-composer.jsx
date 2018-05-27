@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { Modal } from 'react-router-modal';
 
+// import { refreshTroughAsync } from '../action-creators/trough-actions';
 import './modal-twat-composer.scss';
 
 const ModalTwatComposer = ({ visible, hideModalTwatComposer }) => {
@@ -22,4 +24,4 @@ const ModalTwatComposer = ({ visible, hideModalTwatComposer }) => {
   return null;
 };
 
-export default ModalTwatComposer;
+export default connect()(ModalTwatComposer);
