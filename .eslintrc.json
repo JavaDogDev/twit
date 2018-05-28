@@ -11,6 +11,7 @@
     "no-console": "off",
     "no-underscore-dangle": "off",
     "jsx-a11y/click-events-have-key-events": "off",
+    "max-len": "off",
     "jsx-a11y/anchor-is-valid": [ "error", {
       "components": [],
       "specialLink": [ "hrefLeft", "hrefRight" ],

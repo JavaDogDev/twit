@@ -2,26 +2,42 @@ import * as React from 'react';
 import moment from 'moment';
 import axios from 'axios';
 
+import ListTwat from './list-twat';
+import InlineLoadingSpinner from './inline-loading-spinner';
 import './modal-twat.scss';
 
 class ModalTwat extends React.Component {
   constructor() {
     super();
-    this.state = { isLoading: true, twat: null };
+    this.state = {
+      mainTwatLoading: true,
+      repliesLoading: true,
+      twat: null,
+      replies: [],
+    };
   }
 
   componentWillMount() {
-    this.setState({ isLoading: true });
+    this.setState({ mainTwatLoading: true, repliesLoading: true, replies: [] });
     const { twatId } = this.props.match.params;
     axios.get(`/api/twats/${twatId}`)
       .then((res) => {
-        this.setState({ isLoading: false, twat: res.data.twat });
+        this.setState({ mainTwatLoading: false, twat: res.data.twat });
+      })
+      .catch(err => console.error(`Error getting Twat info: ${err}`));
+  }
+
+  componentDidMount() {
+    const { twatId } = this.props.match.params;
+    axios.get(`/api/twats/replies/${twatId}`)
+      .then((res) => {
+        this.setState({ repliesLoading: false, replies: res.data });
       })
       .catch(err => console.error(`Error getting Twat info: ${err}`));
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (this.state.mainTwatLoading) {
       return (
         <div className="modal-twat-content-wrapper">
           <div className="modal-twat-loading-spinner">
@@ -71,7 +87,9 @@ class ModalTwat extends React.Component {
           <div className="twat-button">Twat</div>
         </div>
 
-        {/* replies go here */}
+        {this.state.repliesLoading
+          ? <InlineLoadingSpinner />
+          : this.state.replies.map(reply => <ListTwat twat={reply} key={reply._id} />)}
       </div>
     );
   }

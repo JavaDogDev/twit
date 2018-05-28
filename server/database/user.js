@@ -33,21 +33,27 @@ function createUserModel() {
     });
   });
 
+  /**
+   * @param userId the userId to get and sanitize
+   *
+   * @returns a Promise which resolves to the user with given ID,
+   * with sensitive fields like 'password' removed. Also removes
+   * the 'following' field because it's sometimes quite large.
+   */
+  userSchema.statics.getSanitizedUser = function getSanitizedUser(userId, includeFollowing) {
+    return this.findOne({ userId }).exec().then((user) => {
+      const sanitizedUser = user.toObject();
+      delete sanitizedUser.password;
+      delete sanitizedUser.following;
+      return sanitizedUser;
+    });
+  };
+
   userSchema.methods.comparePassword = function compare(candidatePassword, callback) {
     bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
       if (err) { return callback(err); }
       callback(null, isMatch);
     });
-  };
-
-  /**
-   * @ returns User fields which are safe to expose to the webclient
-   */
-  userSchema.methods.getPublicInfo = function getPublicInfo() {
-    return {
-      username: this.username,
-      displayName: this.displayName,
-    };
   };
 
   return mongoose.model('User', userSchema);

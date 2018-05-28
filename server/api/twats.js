@@ -26,7 +26,7 @@ twatsRouter.post('/', (req, res) => {
 twatsRouter.delete('/:id', async (req, res) => {
   // Make sure current user can delete this twat
   Promise.all([
-    User.findOne({ userId: req.session.userId }),
+    User.getSanitizedUser(req.session.userId),
     Twat.findById(req.params.id),
   ])
     .then(([user, twat]) => {
@@ -44,7 +44,7 @@ twatsRouter.delete('/:id', async (req, res) => {
 });
 
 /*
-  Get twats from followed users
+  Get twats from followed users and self to populate trough
   Returns JSON object: { twats: [] }
 */
 twatsRouter.get('/trough', async (req, res) => {
@@ -55,9 +55,9 @@ twatsRouter.get('/trough', async (req, res) => {
     console.error(`Couldn't get followed users: ${err}`);
   }
 
-  const followedUsers = Promise.all(followedUserIds.map(userId => User.findOne({ userId }).exec()));
+  const followedUsers = Promise.all(followedUserIds.map(userId => User.getSanitizedUser(userId)));
   const followedUsersTwats = Promise.all(followedUserIds.map(Twat.twatsByUser.bind(Twat)));
-  const currentUser = User.findOne({ userId: req.session.userId });
+  const currentUser = User.getSanitizedUser(req.session.userId);
   const currentUserTwats = Twat.twatsByUser(req.session.userId);
 
   Promise.all([followedUsers, followedUsersTwats, currentUser, currentUserTwats])
@@ -74,49 +74,47 @@ twatsRouter.get('/trough', async (req, res) => {
       // Embed user data into every returned Twat
       const responseTwats = [];
       flattenedTwats.forEach((twat) => {
-        const twatClone = { ...twat.toObject() }; // toObject gets actual _doc
-
-        foundUsers.forEach((user) => {
-          // Embed only public-api-safe user data
-          if (user.userId === twatClone.userId) twatClone.user = user.getPublicInfo();
-        });
-
-        // Delete userId prop because I think I want it to remain server-side only...?
-        delete twatClone.userId;
-
+        const twatClone = twat.toObject(); // toObject gets actual _doc
+        twatClone.user = foundUsers.find(user => user.userId === twatClone.userId);
         responseTwats.push(twatClone);
       });
 
-      res.json({ twats: responseTwats });
+      return res.json({ twats: responseTwats });
     })
     .catch(err => console.error(`Error loading Twats from followed users: ${err}`));
 });
 
-/* Return a Twat */
+/* Return a Twat with its user data embedded */
 twatsRouter.get('/:id', async (req, res) => {
   try {
-    const twat = await Twat.findById(req.params.id).exec();
+    const twat = await Twat.getTwatWithUser(req.params.id);
     if (twat === null) {
-      console.error(`Error finding a Twat with ID '${req.params.id}'`);
-      return res.status(404).end();
+      console.error(`Error getting Twat with ID '${req.params.id}'`);
+      return res.status(500).end();
     }
 
-    const user = await User.findOne({ userId: twat.userId }).exec();
-    if (user === null) {
-      console.error(`Error finding user with ID: ${twat.userId}`);
-      return res.status(404).end();
-    }
-
-    // Embed user data into Twat
-    const responseTwat = { ...twat.toObject() };
-    responseTwat.user = user.getPublicInfo();
-    delete responseTwat.userId;
-
-    res.json({ twat: responseTwat });
+    return res.json({ twat });
   } catch (err) {
     console.error(`Error getting Twat with ID '${req.params.id}'\n${err}`);
     res.status(400).end();
   }
+});
+
+/* Returns an array of direct replies to a given Twat */
+twatsRouter.get('/replies/:id', async (req, res) => {
+  const mainTwat = await Twat.getTwatWithUser(req.params.id);
+  if (mainTwat === null) {
+    console.error(`Error getting Twat with ID '${req.params.id}'`);
+    return res.status(404).end();
+  }
+
+  if (mainTwat.replies.length === 0) {
+    // no replies
+    return res.json([]);
+  }
+
+  const replyTwats = await Promise.all(mainTwat.replies.map(replyId => Twat.getTwatWithUser(replyId)));
+  res.json(replyTwats);
 });
 
 module.exports = twatsRouter;
