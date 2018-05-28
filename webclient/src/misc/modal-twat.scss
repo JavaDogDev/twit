@@ -142,10 +142,14 @@ $modal-border-radius: 6px;
     }
   }
 
+  .inline-loading-spinner {
+    display: flex;
+  }
+
   .list-twat {
     padding: 0.5em 2.25em;
 
-    &:not(:first-child) {
+    &:not(&:first-of-type) {
       border-top: 1px solid darken($secondary-blue, 5%);
     }
 

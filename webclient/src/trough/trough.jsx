@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { refreshTroughAsync } from '../action-creators/trough-actions';
 import ListTwat from '../misc/list-twat';
-import TroughLoadingSpinner from './trough-loading-spinner';
+import InlineLoadingSpinner from '../misc/inline-loading-spinner';
 import TwatComposerInline from './twat-composer-inline';
 import './trough.scss';
 
@@ -26,7 +26,7 @@ class Trough extends React.Component {
     return (
       <div className="trough">
         <TwatComposerInline />
-        {this.state.showSpinner ? <TroughLoadingSpinner /> : null}
+        {this.state.showSpinner ? <InlineLoadingSpinner /> : null}
         {this.props.twats.map(twat => <ListTwat twat={twat} key={twat._id} />)}
       </div>
     );
