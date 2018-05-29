@@ -87,9 +87,11 @@ class ModalTwat extends React.Component {
           <div className="twat-button">Twat</div>
         </div>
 
-        {this.state.repliesLoading
-          ? <InlineLoadingSpinner />
-          : this.state.replies.map(reply => <ListTwat twat={reply} key={reply._id} />)}
+        <div>
+          {this.state.repliesLoading
+            ? <InlineLoadingSpinner />
+            : this.state.replies.map(reply => <ListTwat twat={reply} key={reply._id} />)}
+        </div>
       </div>
     );
   }

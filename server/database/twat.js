@@ -22,14 +22,42 @@ function createTwatModel() {
   };
 
   /**
-   * @returns a Promise which resolves to the Twat object,
+   * @param twatIds can be either a single Twat ID or an array of several
+   *
+   * @returns a Promise which resolves to the Twat object (or array of them),
    * with a new "user" prop added containing user info.
    */
-  twatSchema.statics.getTwatWithUser = async function getTwatWithUser(twatId) {
+  twatSchema.statics.getTwatsWithUser = async function getTwatsWithUser(twatIds) {
     try {
-      const twat = await this.findById(twatId).exec();
+      if (Array.isArray(twatIds)) {
+        /* Find multiple twats and attach corresponding User objects */
+        const foundTwats = await this.find({ _id: { $in: twatIds } }).exec();
+        if (foundTwats.length === 0) {
+          console.error(`Error finding Twats with IDs: '${twatIds}'`);
+          return null;
+        }
+        if (foundTwats.length !== twatIds.length) {
+          console.warn(`Warning: Couldn't find all twats from list: ${twatIds}`);
+        }
+
+        /* Get corresponding users */
+        const neededUsersIds = foundTwats.map(twat => twat.userId);
+        const foundUsers = await User.find({ userId: { $in: neededUsersIds } }).exec();
+
+        const resultUsers = foundUsers.map(user => user.toObject());
+
+        /* Add .user property to each resultTwat */
+        return foundTwats.map((twat) => {
+          const finalTwat = twat.toObject();
+          finalTwat.user = resultUsers.find(user => user.userId === finalTwat.userId);
+          return finalTwat;
+        });
+      }
+
+      /* Find single Twat and attach corresponding User object */
+      const twat = await this.findById(twatIds).exec();
       if (twat === null) {
-        console.error(`Error finding a Twat with ID '${twatId}'`);
+        console.error(`Error finding a Twat with ID '${twatIds}'`);
         return null;
       }
 
@@ -45,7 +73,7 @@ function createTwatModel() {
 
       return resultTwat;
     } catch (err) {
-      console.error(`Error getting Twat with ID '${twatId}'\n${err}`);
+      console.error(`Error getting Twats with IDs: '${twatIds}'\n${err}`);
       return null;
     }
   };

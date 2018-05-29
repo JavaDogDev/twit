@@ -88,7 +88,7 @@ twatsRouter.get('/trough', async (req, res) => {
 /* Return a Twat with its user data embedded */
 twatsRouter.get('/:id', async (req, res) => {
   try {
-    const twat = await Twat.getTwatWithUser(req.params.id);
+    const twat = await Twat.getTwatsWithUser(req.params.id);
     if (twat === null) {
       console.error(`Error getting Twat with ID '${req.params.id}'`);
       return res.status(500).end();
@@ -101,9 +101,9 @@ twatsRouter.get('/:id', async (req, res) => {
   }
 });
 
-/* Returns an array of direct replies to a given Twat */
+/* Returns an array of direct replies to a given Twat, sorted newest first */
 twatsRouter.get('/replies/:id', async (req, res) => {
-  const mainTwat = await Twat.getTwatWithUser(req.params.id);
+  const mainTwat = await Twat.getTwatsWithUser(req.params.id);
   if (mainTwat === null) {
     console.error(`Error getting Twat with ID '${req.params.id}'`);
     return res.status(404).end();
@@ -114,7 +114,8 @@ twatsRouter.get('/replies/:id', async (req, res) => {
     return res.json([]);
   }
 
-  const replyTwats = await Promise.all(mainTwat.replies.map(replyId => Twat.getTwatWithUser(replyId)));
+  const replyTwats = (await Twat.getTwatsWithUser(mainTwat.replies))
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   res.json(replyTwats);
 });
 
