@@ -26,7 +26,7 @@ twatsRouter.post('/', (req, res) => {
 twatsRouter.delete('/:id', async (req, res) => {
   // Make sure current user can delete this twat
   Promise.all([
-    User.getSanitizedUser(req.session.userId),
+    User.findOne({ userId: req.session.userId }).exec(),
     Twat.findById(req.params.id),
   ])
     .then(([user, twat]) => {
@@ -50,14 +50,15 @@ twatsRouter.delete('/:id', async (req, res) => {
 twatsRouter.get('/trough', async (req, res) => {
   let followedUserIds = [];
   try {
-    followedUserIds = (await User.findOne({ userId: req.session.userId }).exec()).following;
+    followedUserIds =
+      (await User.findOne({ userId: req.session.userId }).select('+following').exec()).following;
   } catch (err) {
     console.error(`Couldn't get followed users: ${err}`);
   }
 
-  const followedUsers = Promise.all(followedUserIds.map(userId => User.getSanitizedUser(userId)));
+  const followedUsers = Promise.all(followedUserIds.map(userId => User.findOne({ userId }).exec()));
   const followedUsersTwats = Promise.all(followedUserIds.map(Twat.twatsByUser.bind(Twat)));
-  const currentUser = User.getSanitizedUser(req.session.userId);
+  const currentUser = User.findOne({ userId: req.session.userId }).exec();
   const currentUserTwats = Twat.twatsByUser(req.session.userId);
 
   Promise.all([followedUsers, followedUsersTwats, currentUser, currentUserTwats])
