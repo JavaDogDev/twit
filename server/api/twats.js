@@ -7,19 +7,37 @@ const Twat = require('../database/twat');
 const twatsRouter = express.Router();
 twatsRouter.use(bodyParser.json());
 
-/* Accept new Twats */
-twatsRouter.post('/', (req, res) => {
+/* Accept new Twats and replies */
+twatsRouter.post('/', async (req, res) => {
   const newTwat = new Twat({
     twatText: req.body.twatText,
     userId: req.session.userId,
   });
 
-  newTwat.save()
-    .then(() => res.status(200).end())
-    .catch((err) => {
-      console.log(`Error saving new Twat: ${err}`);
+  if (typeof req.body.replyingTo === 'string') {
+    try {
+      // Update doc of Twat we're replying to if this is a reply
+      const savedReply = await newTwat.save();
+      Twat.update({ _id: req.body.replyingTo }, { $push: { replies: savedReply._id } })
+        .then(() => res.status(200).end())
+        .catch((err) => {
+          console.log(`Error while updating replied-to Twat ${req.body.replyingTo}, deleting reply.\n${err}`);
+          savedReply.remove();
+          return res.status(500).end();
+        });
+    } catch (err) {
+      console.log(`Error saving new reply: ${err}`);
       return res.status(500).end();
-    });
+    }
+  } else {
+    // Not a reply, just save normally
+    newTwat.save()
+      .then(() => res.status(200).end())
+      .catch((err) => {
+        console.log(`Error saving new Twat: ${err}`);
+        return res.status(500).end();
+      });
+  }
 });
 
 /* Deletion endpoint */
