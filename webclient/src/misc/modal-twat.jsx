@@ -14,11 +14,21 @@ class ModalTwat extends React.Component {
       repliesLoading: true,
       twat: null,
       replies: [],
+      replyEditorText: '',
     };
+
+    this.handleReplyInput = this.handleReplyInput.bind(this);
+    this.refreshReplies = this.refreshReplies.bind(this);
+    this.submitReply = this.submitReply.bind(this);
   }
 
   componentWillMount() {
-    this.setState({ mainTwatLoading: true, repliesLoading: true, replies: [] });
+    this.setState({
+      mainTwatLoading: true,
+      repliesLoading: true,
+      replies: [],
+      replyEditorText: '',
+    });
     const { twatId } = this.props.match.params;
     axios.get(`/api/twats/${twatId}`)
       .then((res) => {
@@ -28,12 +38,28 @@ class ModalTwat extends React.Component {
   }
 
   componentDidMount() {
+    this.refreshReplies();
+  }
+
+  refreshReplies() {
+    this.setState({ repliesLoading: true });
     const { twatId } = this.props.match.params;
     axios.get(`/api/twats/replies/${twatId}`)
       .then((res) => {
         this.setState({ repliesLoading: false, replies: res.data });
       })
-      .catch(err => console.error(`Error getting Twat info: ${err}`));
+      .catch(err => console.error(`Error getting Twat replies: ${err}`));
+  }
+
+  handleReplyInput(event) {
+    this.setState({ replyEditorText: event.target.value });
+  }
+
+  submitReply() {
+    axios.post('/api/twats', { twatText: this.state.replyEditorText, replyingTo: this.state.twat._id })
+      .then(() => this.setState({ replyEditorText: '' }))
+      .then(this.refreshReplies)
+      .catch(err => console.error(`Error submitting reply: ${err}`));
   }
 
   render() {
@@ -83,8 +109,18 @@ class ModalTwat extends React.Component {
 
         <div className="inline-reply-editor">
           <i className="material-icons user-icon">face</i>
-          <input type="text" />
-          <div className="twat-button">Twat</div>
+          <input
+            type="text"
+            value={this.state.replyEditorText}
+            onChange={this.handleReplyInput}
+          />
+          <button
+            className="twat-button"
+            onClick={this.submitReply}
+            enabled={(this.state.replyEditorText.length > 0).toString()}
+          >
+            Twat
+          </button>
         </div>
 
         <div>
