@@ -146,10 +146,11 @@ $modal-border-radius: 6px;
     display: flex;
   }
 
+  /* replies */
   .list-twat {
     padding: 0.5em 2.25em;
 
-    &:not(&:first-of-type) {
+    &:not(:first-child) {
       border-top: 1px solid darken($secondary-blue, 5%);
     }
 
