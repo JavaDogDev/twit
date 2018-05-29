@@ -33,7 +33,7 @@ function createTwatModel() {
         return null;
       }
 
-      const user = await User.getSanitizedUser(twat.userId);
+      const user = await User.findOne({ userId: twat.userId }).exec();
       if (user === null) {
         console.error(`Error finding user with ID: ${twat.userId}`);
         return null;

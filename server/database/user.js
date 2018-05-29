@@ -8,8 +8,8 @@ function createUserModel() {
     userId: { type: String, required: true, index: { unique: true } },
     username: { type: String, required: true, unique: true },
     displayName: { type: String, required: true },
-    password: { type: String, required: true },
-    following: [String],
+    password: { type: String, required: true, select: false },
+    following: { type: [String], select: false },
   });
 
   userSchema.pre('save', function encryptPasswords(next) {
@@ -33,24 +33,16 @@ function createUserModel() {
     });
   });
 
-  /**
-   * @param userId the userId to get and sanitize
-   *
-   * @returns a Promise which resolves to the user with given ID,
-   * with sensitive fields like 'password' removed. Also removes
-   * the 'following' field because it's sometimes quite large.
-   */
-  userSchema.statics.getSanitizedUser = function getSanitizedUser(userId, includeFollowing) {
-    return this.findOne({ userId }).exec().then((user) => {
-      const sanitizedUser = user.toObject();
-      delete sanitizedUser.password;
-      delete sanitizedUser.following;
-      return sanitizedUser;
-    });
-  };
+  userSchema.methods.comparePassword = async function compare(candidatePassword, callback) {
+    /* eslint-disable no-use-before-define */ // not actuall an error here
+    // Need to do this nasty thing because 'select: false' in model hides password field
+    const { password } = await (User.findOne({ userId: this.userId })
+      .select('password')
+      .exec()
+      .then(doc => doc.toObject())
+      .catch(err => console.log(`Error getting actual password for userId '${this.userId}': ${err}`)));
 
-  userSchema.methods.comparePassword = function compare(candidatePassword, callback) {
-    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+    bcrypt.compare(candidatePassword, password, (err, isMatch) => {
       if (err) { return callback(err); }
       callback(null, isMatch);
     });
