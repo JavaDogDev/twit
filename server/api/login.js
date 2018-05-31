@@ -39,4 +39,9 @@ loginRouter.post('/', (req, res) => {
   });
 });
 
+loginRouter.get('/logout', (req, res) => {
+  req.session.destroy();
+  return res.redirect('/login');
+});
+
 module.exports = loginRouter;
