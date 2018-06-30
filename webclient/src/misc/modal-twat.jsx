@@ -100,7 +100,7 @@ class ModalTwat extends React.Component {
           </div>
 
           <div className="options-bar">
-            <span><i className="material-icons">reply</i>{twat.replies.length}</span>
+            <span><i className="material-icons">reply</i>{this.state.replies.length}</span>
             <span><i className="material-icons">autorenew</i>{twat.meta.retwats}</span>
             <span><i className="material-icons">favorite_border</i>{twat.meta.likes}</span>
             <span><i className="material-icons">message</i></span>
