@@ -11,7 +11,8 @@ function createTwatModel() {
       retwats: { type: Number, default: 0 },
     },
     userId: { type: String, required: true, index: true },
-    replies: { type: [mongoose.Schema.Types.ObjectId], ref: 'Twat', required: true },
+    replies: { type: [mongoose.Schema.Types.ObjectId], ref: 'Twat' },
+    replyingTo: { type: mongoose.Schema.Types.ObjectId, ref: 'Twat' },
   });
 
   /**
