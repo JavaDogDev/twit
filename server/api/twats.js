@@ -23,30 +23,18 @@ twatsRouter.post('/', async (req, res) => {
       if (parentTwat.replyingTo) {
         return res.status(400).end('Can\'t reply to a reply.');
       }
-
-      // Update doc of Twat we're replying to if this is a reply
-      const savedReply = await newTwat.save();
-
-      Twat.update({ _id: req.body.replyingTo }, { $push: { replies: savedReply._id } })
-        .then(() => res.status(200).end())
-        .catch((err) => {
-          console.log(`Error while updating replied-to Twat ${req.body.replyingTo}, deleting reply.\n${err}`);
-          savedReply.remove();
-          return res.status(500).end();
-        });
     } catch (err) {
-      console.log(`Error saving new reply: ${err}`);
+      console.log(`Couldn't get parent for reply: ${err}`);
       return res.status(500).end();
     }
-  } else {
-    // Not a reply, just save normally
-    newTwat.save()
-      .then(() => res.status(200).end())
-      .catch((err) => {
-        console.log(`Error saving new Twat: ${err}`);
-        return res.status(500).end();
-      });
   }
+
+  newTwat.save()
+    .then(() => res.status(200).end())
+    .catch((err) => {
+      console.log(`Error saving new Twat: ${err}`);
+      return res.status(500).end();
+    });
 });
 
 /* Deletion endpoint */
@@ -89,7 +77,7 @@ twatsRouter.get('/trough', async (req, res) => {
   const currentUserTwats = Twat.twatsByUser(req.session.userId);
 
   Promise.all([followedUsers, followedUsersTwats, currentUser, currentUserTwats])
-    .then(([foundUsers, foundTwats, thisUser, ownTwats]) => {
+    .then(async ([foundUsers, foundTwats, thisUser, ownTwats]) => {
       // Flatten [ [user 1 twats...], [user 2 twats...] ] to [ allTwats... ]
       const flattenedTwats = flatten(foundTwats);
 
@@ -100,14 +88,32 @@ twatsRouter.get('/trough', async (req, res) => {
       foundUsers.push(thisUser);
 
       // Embed user data into every returned Twat
-      const responseTwats = [];
+      const userifiedTwats = [];
       flattenedTwats.forEach((twat) => {
         const twatClone = twat.toObject(); // toObject gets actual _doc
         twatClone.user = foundUsers.find(user => user.userId === twatClone.userId);
-        responseTwats.push(twatClone);
+        userifiedTwats.push(twatClone);
       });
 
-      return res.json({ twats: responseTwats });
+      // Find number of replies for each non-reply Twat
+      try {
+        const needReplyCounts = userifiedTwats.filter(twat => typeof twat.replyingTo === 'undefined');
+        const dontNeedReplyCounts = userifiedTwats.filter(twat => typeof twat.replyingTo !== 'undefined');
+
+        // Get reply counts (same order as Twats in needReplyCounts)
+        const replyCounts = await Promise.all(
+          needReplyCounts.map(twat => Twat.count({ replyingTo: twat._id }).exec()));
+
+        const responseTwats = [...dontNeedReplyCounts];
+        needReplyCounts.forEach((twat, index) => {
+          const twatClone = { ...twat };
+          twatClone.numReplies = replyCounts[index];
+          responseTwats.push(twatClone);
+        });
+        res.json({ twats: responseTwats });
+      } catch (err) {
+        console.error(`Couldn't get reply counts for twats: ${err}`);
+      }
     })
     .catch(err => console.error(`Error loading Twats from followed users: ${err}`));
 });
@@ -130,20 +136,21 @@ twatsRouter.get('/:id', async (req, res) => {
 
 /* Returns an array of direct replies to a given Twat, sorted newest first */
 twatsRouter.get('/replies/:id', async (req, res) => {
-  const mainTwat = await Twat.getTwatsWithUser(req.params.id);
-  if (mainTwat === null) {
-    console.error(`Error getting Twat with ID '${req.params.id}'`);
-    return res.status(404).end();
-  }
+  try {
+    const allReplyIds = await Twat.find({ replyingTo: req.params.id }, '_id').exec();
 
-  if (mainTwat.replies.length === 0) {
-    // no replies
-    return res.json([]);
-  }
+    if (allReplyIds.length === 0) {
+      return res.json([]);
+    }
 
-  const replyTwats = (await Twat.getTwatsWithUser(mainTwat.replies))
-    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  res.json(replyTwats);
+    const replyTwats = (await Twat.getTwatsWithUser(allReplyIds))
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    res.json(replyTwats);
+  } catch (err) {
+    console.error(`Error getting replies to ID: '${req.params.id}'\n${err}`);
+    return res.status(500).end();
+  }
 });
 
 module.exports = twatsRouter;
