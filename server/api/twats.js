@@ -15,9 +15,18 @@ twatsRouter.post('/', async (req, res) => {
   });
 
   if (typeof req.body.replyingTo === 'string') {
+    newTwat.replyingTo = req.body.replyingTo;
+
     try {
+      // Make sure user isn't replying to a reply (not allowed)
+      const parentTwat = await Twat.findById(req.body.replyingTo);
+      if (parentTwat.replyingTo) {
+        return res.status(400).end('Can\'t reply to a reply.');
+      }
+
       // Update doc of Twat we're replying to if this is a reply
       const savedReply = await newTwat.save();
+
       Twat.update({ _id: req.body.replyingTo }, { $push: { replies: savedReply._id } })
         .then(() => res.status(200).end())
         .catch((err) => {
