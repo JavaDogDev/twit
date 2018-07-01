@@ -34,7 +34,7 @@ function createUserModel() {
   });
 
   userSchema.methods.comparePassword = async function compare(candidatePassword, callback) {
-    /* eslint-disable no-use-before-define */ // not actuall an error here
+    /* eslint-disable no-use-before-define */ // not actually an error here
     // Need to do this nasty thing because 'select: false' in model hides password field
     const { password } = await (User.findOne({ userId: this.userId })
       .select('password')
