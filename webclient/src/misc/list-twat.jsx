@@ -35,9 +35,11 @@ const ListTwat = ({ twat, hideReplyIcon }) => {
             </span>
           : null}
           {!isReply && !hideReplyIcon ?
-            <span title="Show thread">
-              <i className="material-icons">keyboard_arrow_up</i>&nbsp;
-            </span>
+            <Link to={`/twat/${twat.replyingTo}`} style={{ textDecoration: 'none' }}>
+              <span title="Show thread">
+                <i className="material-icons">keyboard_arrow_up</i>&nbsp;
+              </span>
+            </Link>
           : null}
           <span><i className="material-icons">autorenew</i>{twat.meta.retwats}</span>
           <span><i className="material-icons">favorite_border</i>{twat.meta.likes}</span>

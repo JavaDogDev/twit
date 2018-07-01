@@ -91,6 +91,9 @@
       align-items: center;
     }
 
-    i { margin-right: 0.25em; }
+    i {
+      color: $inactive;
+      margin-right: 0.25em;
+    }
   }
 }
