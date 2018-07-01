@@ -95,7 +95,7 @@ twatsRouter.get('/trough', async (req, res) => {
         userifiedTwats.push(twatClone);
       });
 
-      // Find number of replies for each non-reply Twat
+      /* Hacky solution to include `numReplies` prop on every top-level Twat */
       try {
         const needReplyCounts = userifiedTwats.filter(twat => typeof twat.replyingTo === 'undefined');
         const dontNeedReplyCounts = userifiedTwats.filter(twat => typeof twat.replyingTo !== 'undefined');
@@ -110,6 +110,8 @@ twatsRouter.get('/trough', async (req, res) => {
           twatClone.numReplies = replyCounts[index];
           responseTwats.push(twatClone);
         });
+
+        // Send list back
         res.json({ twats: responseTwats });
       } catch (err) {
         console.error(`Couldn't get reply counts for twats: ${err}`);
