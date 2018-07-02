@@ -6,13 +6,6 @@
   height: 100vh;
 }
 
-.dashboard-wrapper > header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
 .dashboard-wrapper > main {
   display: flex;
   flex-flow: row wrap;

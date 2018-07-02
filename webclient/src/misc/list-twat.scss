@@ -35,6 +35,8 @@
     font-size: 0.875rem;
 
     .user-link {
+      color: $inactive;
+      text-decoration: none;
       cursor: pointer;
 
       &:hover {
