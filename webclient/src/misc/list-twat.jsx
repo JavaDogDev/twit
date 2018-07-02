@@ -15,10 +15,10 @@ const ListTwat = ({ twat, hideReplyIcon }) => {
 
       <div className="list-twat-content">
         <div className="heading">
-          <span className="user-link">
+          <Link to={`/user/${twat.user.username}`} className="user-link">
             <span className="display-name">{twat.user.displayName}</span>
             <span>@{twat.user.username}</span>
-          </span>
+          </Link>
           &nbsp; &middot; &nbsp;
           <Link to={`/twat/${twat._id}`} style={{ textDecoration: 'none' }}>
             <span className="relative-timestamp">{timeSince(new Date(twat.timestamp))}</span>
