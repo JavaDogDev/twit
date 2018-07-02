@@ -19,6 +19,11 @@ class UserPage extends React.Component {
         <img className="header-image" src="/dist/img/header-placeholder.jpg" alt="Profile header" />
         <div className="profile-nav">
           <div className="profile-nav-content">
+
+            <div className="user-avatar">
+              <img src="/dist/img/avatar-placeholder.jpg" alt="User avatar" />
+            </div>
+
             <ul className="profile-nav-items">
               <li>
                 <span>Twats</span><br />
@@ -37,6 +42,7 @@ class UserPage extends React.Component {
                 <span>54365</span>
               </li>
             </ul>
+
             <div className="twat-button">
               Follow
             </div>
