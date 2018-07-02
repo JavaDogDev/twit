@@ -1,5 +1,64 @@
 @import '../misc/global';
+@import '../misc/screen-sizes';
 
 .user-page {
+  display: flex;
+  flex-flow: column nowrap;
 
+  padding-top: 42px; // height of NavBar
+
+  img.header-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+
+  .profile-nav {
+    display: flex;
+    justify-content: center;
+
+    height: 59px;
+    background-color: #243443;
+  }
+
+  .profile-nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    max-width: $sm-max-content-width;
+
+    @include md {
+      max-width: $md-max-content-width;
+    }
+
+    @include lg {
+      max-width: $lg-max-content-width;
+    }
+  }
+
+  ul.profile-nav-items {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    li {
+      display: inline-block;
+      padding: 0.25em 2em 0.25em 0;
+      text-align: center;
+      cursor: pointer;
+
+      span:first-child {
+        color: $inactive;
+        font-size: 0.8rem;
+      }
+
+      span:nth-of-type(2) {
+        color: $active-blue;
+        font-size: 1.15rem;
+        font-weight: bold;
+      }
+    }
+  }
 }
