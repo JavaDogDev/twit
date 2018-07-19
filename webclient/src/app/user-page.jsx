@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classNames from 'classnames';
 
 import './user-page.scss';
 
@@ -10,6 +11,7 @@ class UserPage extends React.Component {
       userTwats: null,
       userInfoLoading: true,
       userTwatsLoading: true,
+      activeNavTab: 'twats'
     };
   }
 
@@ -25,22 +27,10 @@ class UserPage extends React.Component {
             </div>
 
             <ul className="profile-nav-items">
-              <li>
-                <span>Twats</span><br />
-                <span>3594</span>
-              </li>
-              <li>
-                <span>Following</span><br />
-                <span>4954</span>
-              </li>
-              <li>
-                <span>Followers</span><br />
-                <span>345</span>
-              </li>
-              <li>
-                <span>Likes</span><br />
-                <span>54365</span>
-              </li>
+              <NavTab title="Twats" count={8494} isActive />
+              <NavTab title="Following" count={4954} />
+              <NavTab title="Followers" count={345} />
+              <NavTab title="Likes" count={54365} />
             </ul>
 
             <div className="twat-button">
@@ -52,5 +42,12 @@ class UserPage extends React.Component {
     );
   }
 }
+
+const NavTab = ({ title, count, isActive }) => (
+  <li className={classNames({ isActive })}>
+    <span>{title}</span><br />
+    <span>{count}</span>
+  </li>
+);
 
 module.exports = UserPage;
