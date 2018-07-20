@@ -59,10 +59,10 @@ twatsRouter.delete('/:id', async (req, res) => {
 });
 
 /*
-  Get twats from followed users and self to populate trough
+  Get twats from followed users and self to populate trough on dashboard page
   Returns JSON object: { twats: [] }
 */
-twatsRouter.get('/trough', async (req, res) => {
+twatsRouter.get('/dashboard-trough', async (req, res) => {
   let followedUserIds = [];
   try {
     followedUserIds =

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { Modal } from 'react-router-modal';
 
-import { refreshTroughAsync } from '../action-creators/trough-actions';
+import { refreshDashboardTroughAsync } from '../action-creators/dashboard-actions';
 import './modal-twat-composer.scss';
 
 class ModalTwatComposer extends React.Component {
@@ -22,7 +22,7 @@ class ModalTwatComposer extends React.Component {
   submitNewTwat() {
     axios.post('/api/twats', { twatText: this.state.twatText })
       .then(() => { this.setState({ twatText: '' }); })
-      .then(this.props.dispatch(refreshTroughAsync()))
+      .then(this.props.dispatch(refreshDashboardTroughAsync()))
       .then(() => this.props.hideModalTwatComposer())
       .catch(err => console.error(`Error submitting new Twat: ${err}`));
   }

@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import troughReducer from './trough-reducer';
+import dashboardReducer from './dashboard-reducer';
 
 const rootReducer = combineReducers({
-  trough: troughReducer,
+  dashboard: dashboardReducer,
 });
 
 export default rootReducer;
