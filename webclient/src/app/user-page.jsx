@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import Trough from '../trough/trough';
+import Trends from '../misc/trends';
 import './user-page.scss';
 
 class UserPage extends React.Component {
@@ -19,7 +21,6 @@ class UserPage extends React.Component {
         <img className="header-image" src="/dist/img/header-placeholder.jpg" alt="Profile header" />
         <div className="profile-nav">
           <div className="profile-nav-content">
-
             <div className="user-avatar">
               <img src="/dist/img/avatar-placeholder.jpg" alt="User avatar" />
             </div>
@@ -47,6 +48,14 @@ class UserPage extends React.Component {
               Follow
             </div>
           </div>
+        </div>
+
+        <div className="profile-content">
+          <div className="profile-info">
+            Profile info here...
+          </div>
+          <Trough />
+          <Trends />
         </div>
       </div>
     );
