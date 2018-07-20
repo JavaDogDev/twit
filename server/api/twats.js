@@ -120,6 +120,17 @@ twatsRouter.get('/dashboard-trough', async (req, res) => {
     .catch(err => console.error(`Error loading Twats from followed users: ${err}`));
 });
 
+/* Return an array of Twats made by user with given userId. */
+twatsRouter.get('/by/:userId', async (req, res) => {
+  try {
+    const twats = await Twat.twatsByUser(req.params.userId);
+    return res.json(twats);
+  } catch (err) {
+    console.error(`Error getting Twats by userId ${req.params.userId}:\n${err}`);
+    return res.status(500).end();
+  }
+});
+
 /* Return a Twat with its user data embedded */
 twatsRouter.get('/:id', async (req, res) => {
   try {

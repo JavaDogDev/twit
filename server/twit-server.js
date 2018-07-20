@@ -6,7 +6,8 @@ const compression = require('compression');
 const MongoStore = require('connect-mongo')(session);
 const verifyAuthentication = require('./verify-authentication');
 const loginRouter = require('./api/login');
-const twatRouter = require('./api/twats');
+const twatsRouter = require('./api/twats');
+const usersRouter = require('./api/users');
 
 const app = express();
 
@@ -38,7 +39,8 @@ const app = express();
   app.use(verifyAuthentication);
 
   /* Authenticated API endpoints */
-  app.use('/api/twats', twatRouter);
+  app.use('/api/twats', twatsRouter);
+  app.use('/api/users', usersRouter);
 
   // If no other route matches, send GET requests to index.html
   app.get('/*', (req, res) => res.sendFile(

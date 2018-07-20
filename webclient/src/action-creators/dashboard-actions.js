@@ -20,5 +20,5 @@ function updateDashboardTrough(newContent) {
 export function refreshDashboardTroughAsync() {
   return dispatch => axios.get('/api/twats/dashboard-trough')
     .then(res => dispatch(updateDashboardTrough(res.data.twats)))
-    .catch(err => console.log(`Error refreshing Dashboard's Trough: ${err}`));
+    .catch(err => console.error(`Error refreshing Dashboard's Trough: ${err}`));
 }
