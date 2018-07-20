@@ -56,15 +56,19 @@
   }
 
   ul.profile-nav-items {
-    margin: 0 0 0 200px;
+    margin: 0 0 0 185px;
     padding: 0;
+    height: 100%;
     list-style-type: none;
 
+    /* NavTab */
     li {
       display: inline-block;
-      padding: 0.25em 2em 0.25em 0;
+      padding: 0.65em 1em;
+      height: 100%;
       text-align: center;
       cursor: pointer;
+      border-bottom: 2px solid transparent;
 
       span:first-child {
         color: $inactive;
@@ -72,9 +76,17 @@
       }
 
       span:nth-of-type(2) {
-        color: $active-blue;
+        color: $inactive;
         font-size: 1.15rem;
         font-weight: bold;
+      }
+
+      &.isActive, &:hover {
+        border-bottom: 2px solid $active-blue;
+
+        span:nth-of-type(2) {
+          color: $active-blue;
+        }
       }
     }
   }
