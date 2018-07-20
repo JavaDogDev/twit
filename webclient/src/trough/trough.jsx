@@ -9,7 +9,7 @@ const Trough = ({ twats, isLoading, showTwatComposer }) => (
   <div className="trough">
     {showTwatComposer ? <TwatComposerInline /> : null}
     {isLoading ? <InlineLoadingSpinner /> : null}
-    {twats.map(twat => <ListTwat twat={twat} key={twat._id} />)}
+    {twats ? twats.map(twat => <ListTwat twat={twat} key={twat._id} />) : null}
   </div>
 );
 
