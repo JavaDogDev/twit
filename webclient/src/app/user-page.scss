@@ -78,4 +78,24 @@
       }
     }
   }
+
+  .profile-content {
+    display: grid;
+    align-self: center;
+    grid-template-columns: 1fr;
+    grid-gap: 1em;
+    padding-top: 1em;
+    width: 100%;
+    max-width: $sm-max-content-width;
+
+    @include md {
+      grid-template-columns: 1fr 2fr;
+      max-width: $md-max-content-width;
+    }
+
+    @include lg {
+      grid-template-columns: 1fr 2fr 1fr;
+      max-width: $lg-max-content-width;
+    }
+  }
 }
