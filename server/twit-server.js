@@ -21,9 +21,12 @@ const app = express();
     secret: 'development-placeholder', // TODO load from config file for prod
     sameSite: 'strict',
     resave: false,
+    unset: 'destroy',
     saveUninitialized: false,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    },
   }));
 
   /* Compress responses with gzip */
