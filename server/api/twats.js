@@ -102,7 +102,7 @@ twatsRouter.get('/dashboard-trough', async (req, res) => {
 
         // Get reply counts (same order as Twats in needReplyCounts)
         const replyCounts = await Promise.all(
-          needReplyCounts.map(twat => Twat.count({ replyingTo: twat._id }).exec()));
+          needReplyCounts.map(twat => Twat.countDocuments({ replyingTo: twat._id }).exec()));
 
         const responseTwats = [...dontNeedReplyCounts];
         needReplyCounts.forEach((twat, index) => {
