@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { LastLocationProvider } from 'react-router-last-location';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
@@ -18,7 +19,11 @@ const supportsHistory = 'pushState' in window.history;
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter forceRefresh={!supportsHistory}><App /></BrowserRouter>
+    <BrowserRouter forceRefresh={!supportsHistory}>
+      <LastLocationProvider>
+        <App />
+      </LastLocationProvider>
+    </BrowserRouter>
   </Provider>,
   document.getElementById('wrapper'),
 );

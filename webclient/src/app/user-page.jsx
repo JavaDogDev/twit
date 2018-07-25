@@ -17,11 +17,9 @@ function mapStateToProps(state) {
 }
 
 class UserPage extends React.Component {
-  componentWillMount() {
-    this.props.dispatch(setUserPageLoading());
-  }
-
   componentDidMount() {
+    this.props.dispatch(setUserPageLoading());
+
     const { username } = this.props.match.params;
     this.props.dispatch(updateUserPageAsync(username));
   }
