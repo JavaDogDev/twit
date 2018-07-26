@@ -65,7 +65,7 @@ class UserPage extends React.Component {
           </div>
         </div>
 
-        <div className="profile-content">
+        <main>
           <div className="profile-info">
             Profile info here...
           </div>
@@ -73,7 +73,7 @@ class UserPage extends React.Component {
           <Trough twats={userifiedTwats} isLoading={isLoading} />
 
           <Trends />
-        </div>
+        </main>
       </div>
     );
   }

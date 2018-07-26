@@ -5,7 +5,7 @@
   display: flex;
   flex-flow: column nowrap;
 
-  padding-top: 42px; // height of NavBar
+  padding: 42px 0; // height of NavBar
 
   // Shows when content is loading
   & > .inline-loading-spinner {
@@ -97,9 +97,10 @@
     }
   }
 
-  .profile-content {
+  main {
     display: grid;
     align-self: center;
+    align-items: start;
     grid-template-columns: 1fr;
     grid-gap: 1em;
     padding-top: 1em;

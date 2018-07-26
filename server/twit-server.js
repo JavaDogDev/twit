@@ -12,7 +12,7 @@ const usersRouter = require('./api/users');
 const app = express();
 
 (async function startServer() {
-  await mongoose.connect('mongodb://localhost:27017/twit');
+  await mongoose.connect('mongodb://localhost:27017/twit', { useNewUrlParser: true });
   console.log('Connected to database.');
 
   /* Track sessions in MongoDB */
