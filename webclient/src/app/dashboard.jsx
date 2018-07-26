@@ -38,11 +38,13 @@ class Dashboard extends React.Component {
                   <div className="username">@username</div>
                 </div>
               </div>
+
               <div className="user-stats">
                 <div className="user-stats-column">
                   <div>Twats</div>
                   <div>45</div>
                 </div>
+
                 <div className="user-stats-column">
                   <div>Following</div>
                   <div>954</div>
