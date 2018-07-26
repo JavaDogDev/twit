@@ -1,10 +1,22 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import { Link, matchPath, withRouter } from 'react-router-dom';
 
 import NavBarProfileDropdown from '../misc/nav-bar-profile-dropdown';
 import './nav-bar.scss';
 
+/** To keep track of which NavButton to highlight as active */
+const routes = {
+  notifications: '/notifications',
+  messages: '/messages',
+  home: '/',
+};
+
 class NavBar extends React.Component {
+  static isPathActive(path, current) {
+    return matchPath(current, { path, exact: true }) !== null;
+  }
+
   constructor() {
     super();
     this.state = { settingsDropdownOpen: false };
@@ -22,12 +34,30 @@ class NavBar extends React.Component {
   }
 
   render() {
+    const { location } = this.props;
+    const path = location.pathname;
+
     return (
       <header>
         <div className="nav-buttons">
-          <NavButton active iconName="home" buttonText="Home" />
-          <NavButton iconName="notifications" buttonText="Notifications" />
-          <NavButton iconName="email" buttonText="Messages" />
+          <NavButton
+            linkPath={routes.home}
+            active={NavBar.isPathActive(routes.home, path)}
+            iconName="home"
+            buttonText="Home"
+          />
+          <NavButton
+            linkPath={routes.notifications}
+            active={NavBar.isPathActive(routes.notifications, path)}
+            iconName="notifications"
+            buttonText="Notifications"
+          />
+          <NavButton
+            linkPath={routes.messages}
+            active={NavBar.isPathActive(routes.messages, path)}
+            iconName="email"
+            buttonText="Messages"
+          />
 
           <SearchBox />
           <SettingsMenu
@@ -49,10 +79,12 @@ class NavBar extends React.Component {
   }
 }
 
-const NavButton = ({ iconName, buttonText, active }) => (
-  <div className={classNames('nav-button', { active })}>
+const NavButton = ({
+  linkPath, iconName, buttonText, active,
+}) => (
+  <Link to={linkPath} className={classNames('nav-button', { active })}>
     <i className="material-icons">{iconName}</i> {buttonText}
-  </div>
+  </Link>
 );
 
 const SearchBox = () => (
@@ -70,4 +102,4 @@ const SettingsMenu = ({ settingsDropdownOpen, onOpenDropdown, onCloseDropdown })
   </div>
 );
 
-export default NavBar;
+export default withRouter(NavBar);
