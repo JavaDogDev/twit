@@ -67,7 +67,9 @@ class UserPage extends React.Component {
 
         <main>
           <div className="profile-info">
-            Profile info here...
+            <div className="display-name">{user.displayName}</div>
+            <div className="username">@{user.username}</div>
+            <div className="bio">{user.bio}</div>
           </div>
 
           <Trough twats={userifiedTwats} isLoading={isLoading} />

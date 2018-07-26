@@ -117,4 +117,24 @@
       max-width: $lg-max-content-width;
     }
   }
+
+  .profile-info {
+    margin-top: 1.5em;
+    padding: 0 1em;
+
+    .display-name {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .username {
+      color: $inactive;
+      margin-top: 0.15em;
+    }
+
+    .bio {
+      margin-top: 2em;
+      font-size: 0.82rem;
+    }
+  }
 }

@@ -8,6 +8,7 @@ function createUserModel() {
     userId: { type: String, required: true, index: { unique: true } },
     username: { type: String, required: true, unique: true },
     displayName: { type: String, required: true },
+    bio: { type: String, default: '' },
     password: { type: String, required: true, select: false },
     following: { type: [String], select: false },
   });
