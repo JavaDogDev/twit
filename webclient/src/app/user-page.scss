@@ -101,20 +101,40 @@
     display: grid;
     align-self: center;
     align-items: start;
+    justify-content: center;
     grid-template-columns: 1fr;
     grid-gap: 1em;
     padding-top: 1em;
     width: 100%;
     max-width: $sm-max-content-width;
 
+    .trends {
+      display: none;
+    }
+
     @include md {
       grid-template-columns: 1fr 2fr;
       max-width: $md-max-content-width;
+
+      .trends {
+        display: block;
+        grid-column: 1;
+      }
+
+      .trough {
+        grid-column: 2;
+        grid-row: 1 / span 3;
+      }
     }
 
     @include lg {
       grid-template-columns: 1fr 2fr 1fr;
       max-width: $lg-max-content-width;
+
+      .trends {
+        display: block;
+        grid-column: 3;
+      }
     }
   }
 
