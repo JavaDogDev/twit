@@ -1,8 +1,13 @@
 import * as React from 'react';
-import { Switch, Route, withRouter, matchPath } from 'react-router-dom';
 import { withLastLocation } from 'react-router-last-location';
 import { ModalContainer, ModalRoute } from 'react-router-modal';
 import 'react-router-modal/css/react-router-modal.css';
+import {
+  Switch,
+  Route,
+  withRouter,
+  matchPath,
+} from 'react-router-dom';
 
 import Login from './login';
 import NavBar from './nav-bar';
@@ -27,9 +32,11 @@ class App extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { location } = this.props;
+
     // If we're about to show a Twat modal, prevent the main page content from
     // rendering again (otherwise it'll default to the Dashboard route).
-    if (nextProps.location !== this.props.location) {
+    if (nextProps.location !== location) {
       const showingTwat = matchPath(nextProps.location.pathname, { path: '/twat/:id' }) !== null;
       this.setState({ shouldPageUpdate: !showingTwat });
     }
@@ -44,13 +51,16 @@ class App extends React.Component {
   }
 
   render() {
+    const { location, lastLocation } = this.props;
+    const { shouldPageUpdate, twatComposerOpen } = this.state;
+
     return (
       <div>
-        {this.props.location.pathname !== '/login'
+        {location.pathname !== '/login'
           ? <NavBar showModalTwatComposer={this.showModalTwatComposer} />
           : null}
 
-        <RenderBlocker block={!this.state.shouldPageUpdate}>
+        <RenderBlocker block={!shouldPageUpdate}>
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/user/:username" component={UserPage} />
@@ -59,14 +69,14 @@ class App extends React.Component {
         </RenderBlocker>
 
         <ModalTwatComposer
-          visible={this.state.twatComposerOpen}
+          visible={twatComposerOpen}
           hideModalTwatComposer={this.hideModalTwatComposer}
         />
 
         <ModalRoute
           exact
           path="/twat/:twatId"
-          parentPath={this.props.lastLocation || '/'}
+          parentPath={lastLocation || '/'}
           className="react-router-modal__modal modal-twat"
           component={ModalTwat}
         />

@@ -20,15 +20,18 @@ class ModalTwatComposer extends React.Component {
   }
 
   submitNewTwat() {
-    axios.post('/api/twats', { twatText: this.state.twatText })
+    const { dispatch, hideModalTwatComposer } = this.props;
+    const { twatText } = this.state;
+    axios.post('/api/twats', { twatText })
       .then(() => { this.setState({ twatText: '' }); })
-      .then(this.props.dispatch(refreshDashboardTroughAsync()))
-      .then(() => this.props.hideModalTwatComposer())
+      .then(dispatch(refreshDashboardTroughAsync()))
+      .then(() => hideModalTwatComposer())
       .catch(err => console.error(`Error submitting new Twat: ${err}`));
   }
 
   render() {
     const { visible, hideModalTwatComposer } = this.props;
+    const { twatText } = this.state;
 
     if (visible) {
       return (
@@ -37,8 +40,8 @@ class ModalTwatComposer extends React.Component {
           <div className="contents">
             <i className="material-icons">face</i>
             <div className="contents-right-column">
-              <textarea value={this.state.twatText} onChange={this.handleTextInput} />
-              <button className="twat-button" onClick={this.submitNewTwat}>Twat</button>
+              <textarea value={twatText} onChange={this.handleTextInput} />
+              <button type="button" className="twat-button" onClick={this.submitNewTwat}>Twat</button>
             </div>
           </div>
         </Modal>

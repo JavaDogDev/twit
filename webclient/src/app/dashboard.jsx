@@ -19,11 +19,15 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(refreshDashboardTroughAsync())
+    const { dispatch } = this.props;
+    dispatch(refreshDashboardTroughAsync())
       .then(() => this.setState({ troughLoading: false }));
   }
 
   render() {
+    const { twats } = this.props;
+    const { troughLoading } = this.state;
+
     return (
       <div className="dashboard-wrapper">
         <main>
@@ -51,7 +55,7 @@ class Dashboard extends React.Component {
             </div>
           </div>
 
-          <Trough twats={this.props.twats} isLoading={this.state.troughLoading} showTwatComposer />
+          <Trough twats={twats} isLoading={troughLoading} showTwatComposer />
 
           <Trends />
         </main>
@@ -59,6 +63,5 @@ class Dashboard extends React.Component {
     );
   }
 }
-
 
 export default connect(mapStateToProps)(Dashboard);

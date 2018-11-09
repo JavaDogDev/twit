@@ -14,7 +14,8 @@ class NavBarProfileDropdown extends React.Component {
   }
 
   handleClickOutside() {
-    this.props.onCloseDropdown();
+    const { onCloseDropdown } = this.props;
+    onCloseDropdown();
   }
 
   render() {

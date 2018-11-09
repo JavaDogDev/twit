@@ -46,7 +46,8 @@ class NavBar extends React.Component {
   }
 
   render() {
-    const { location } = this.props;
+    const { location, showModalTwatComposer } = this.props;
+    const { settingsDropdownOpen } = this.state;
     const path = location.pathname;
 
     return (
@@ -73,7 +74,7 @@ class NavBar extends React.Component {
 
           <SearchBox />
           <SettingsMenu
-            settingsDropdownOpen={this.state.settingsDropdownOpen}
+            settingsDropdownOpen={settingsDropdownOpen}
             onOpenDropdown={this.onOpenDropdown}
             onCloseDropdown={this.onCloseDropdown}
           />
@@ -81,7 +82,7 @@ class NavBar extends React.Component {
             className="twat-button"
             role="button"
             tabIndex={0}
-            onClick={this.props.showModalTwatComposer}
+            onClick={showModalTwatComposer}
           >
             Twat
           </div>
@@ -95,7 +96,8 @@ const NavButton = ({
   linkPath, iconName, buttonText, active,
 }) => (
   <Link to={linkPath} className={classNames('nav-button', { active })}>
-    <i className="material-icons">{iconName}</i> {buttonText}
+    <i className="material-icons">{iconName}</i>
+    {buttonText}
   </Link>
 );
 

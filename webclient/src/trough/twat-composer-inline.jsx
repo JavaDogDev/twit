@@ -18,14 +18,16 @@ class TwatComposerInline extends React.Component {
   }
 
   submitNewTwat() {
-    const twatText = this.state.composerText;
+    const { dispatch, composerText } = this.state;
+    const twatText = composerText;
     axios.post('/api/twats', { twatText })
       .then(() => { this.setState({ composerText: '' }); })
-      .then(this.props.dispatch(refreshDashboardTroughAsync()))
+      .then(dispatch(refreshDashboardTroughAsync()))
       .catch(err => console.error(`Error submitting new Twat: ${err}`));
   }
 
   render() {
+    const { composerText } = this.state;
     return (
       <div className="twat-composer-inline">
         <div className="user-icon">
@@ -33,11 +35,12 @@ class TwatComposerInline extends React.Component {
         </div>
         <input
           type="text"
-          value={this.state.composerText}
+          value={composerText}
           placeholder="Don't think, just type."
           onChange={this.handleComposerInput}
         />
         <button
+          type="button"
           className="twat-button"
           tabIndex={0}
           onClick={this.submitNewTwat}

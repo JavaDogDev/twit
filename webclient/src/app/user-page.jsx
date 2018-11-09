@@ -18,10 +18,12 @@ function mapStateToProps(state) {
 
 class UserPage extends React.Component {
   componentDidMount() {
-    this.props.dispatch(setUserPageLoading());
+    const { dispatch, match } = this.props;
 
-    const { username } = this.props.match.params;
-    this.props.dispatch(updateUserPageAsync(username));
+    dispatch(setUserPageLoading());
+
+    const { username } = match.params;
+    dispatch(updateUserPageAsync(username));
   }
 
   render() {
@@ -68,7 +70,7 @@ class UserPage extends React.Component {
         <main>
           <div className="profile-info">
             <div className="display-name">{user.displayName}</div>
-            <div className="username">@{user.username}</div>
+            <div className="username">{`@${user.username}`}</div>
             <div className="bio">{user.bio}</div>
           </div>
 
@@ -83,7 +85,8 @@ class UserPage extends React.Component {
 
 const NavTab = ({ title, count, isActive }) => (
   <li className={classNames({ isActive })}>
-    <span>{title}</span><br />
+    <span>{title}</span>
+    <br />
     <span>{count}</span>
   </li>
 );

@@ -23,13 +23,16 @@ class ModalTwat extends React.Component {
   }
 
   componentWillMount() {
+    const { match } = this.props;
+
     this.setState({
       mainTwatLoading: true,
       repliesLoading: true,
       replies: [],
       replyEditorText: '',
     });
-    const { twatId } = this.props.match.params;
+
+    const { twatId } = match.params;
     axios.get(`/api/twats/${twatId}`)
       .then((res) => {
         this.setState({ mainTwatLoading: false, twat: res.data.twat });
@@ -42,8 +45,11 @@ class ModalTwat extends React.Component {
   }
 
   refreshReplies() {
+    const { match } = this.props;
+
     this.setState({ repliesLoading: true });
-    const { twatId } = this.props.match.params;
+
+    const { twatId } = match.params;
     axios.get(`/api/twats/replies/${twatId}`)
       .then((res) => {
         this.setState({ repliesLoading: false, replies: res.data });
@@ -56,14 +62,17 @@ class ModalTwat extends React.Component {
   }
 
   submitReply() {
-    axios.post('/api/twats', { twatText: this.state.replyEditorText, replyingTo: this.state.twat._id })
+    const { replyEditorText, twat } = this.state;
+
+    axios.post('/api/twats', { twatText: replyEditorText, replyingTo: twat._id })
       .then(() => this.setState({ replyEditorText: '' }))
       .then(this.refreshReplies)
       .catch(err => console.error(`Error submitting reply: ${err}`));
   }
 
   render() {
-    if (this.state.mainTwatLoading) {
+    const { mainTwatLoading } = this.state;
+    if (mainTwatLoading) {
       return (
         <div className="modal-twat-content-wrapper">
           <div className="modal-twat-loading-spinner">
@@ -73,7 +82,12 @@ class ModalTwat extends React.Component {
       );
     }
 
-    const { twat } = this.state;
+    const {
+      twat,
+      replies,
+      replyEditorText,
+      repliesLoading,
+    } = this.state;
     return (
       <div className="modal-twat-content-wrapper">
         <div className="main-content-container">
@@ -82,7 +96,7 @@ class ModalTwat extends React.Component {
               <i className="material-icons user-icon">face</i>
               <div>
                 <div className="display-name">{twat.user.displayName}</div>
-                <div className="username">@{twat.user.username}</div>
+                <div className="username">{`@${twat.user.username}`}</div>
               </div>
             </div>
             <div>
@@ -100,9 +114,18 @@ class ModalTwat extends React.Component {
           </div>
 
           <div className="options-bar">
-            <span><i className="material-icons">reply</i>{this.state.replies.length}</span>
-            <span><i className="material-icons">autorenew</i>{twat.meta.retwats}</span>
-            <span><i className="material-icons">favorite_border</i>{twat.meta.likes}</span>
+            <span>
+              <i className="material-icons">reply</i>
+              {replies.length}
+            </span>
+            <span>
+              <i className="material-icons">autorenew</i>
+              {twat.meta.retwats}
+            </span>
+            <span>
+              <i className="material-icons">favorite_border</i>
+              {twat.meta.likes}
+            </span>
             <span><i className="material-icons">message</i></span>
           </div>
         </div>
@@ -112,24 +135,24 @@ class ModalTwat extends React.Component {
             <i className="material-icons user-icon">face</i>
             <input
               type="text"
-              value={this.state.replyEditorText}
+              value={replyEditorText}
               onChange={this.handleReplyInput}
             />
             <button
+              type="button"
               className="twat-button"
               onClick={this.submitReply}
-              enabled={(this.state.replyEditorText.length > 0).toString()}
+              enabled={(replyEditorText.length > 0).toString()}
             >
               Twat
             </button>
           </div>
-        )
-          : null}
+        ) : null}
 
         <div>
-          {this.state.repliesLoading
+          {repliesLoading
             ? <InlineLoadingSpinner />
-            : this.state.replies.map(reply => <ListTwat initialTwat={reply} key={reply._id} hideReplyIcon />)}
+            : replies.map(reply => <ListTwat initialTwat={reply} key={reply._id} hideReplyIcon />)}
         </div>
       </div>
     );
