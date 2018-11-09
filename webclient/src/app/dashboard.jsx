@@ -7,7 +7,10 @@ import Trends from '../misc/trends';
 import './dashboard.scss';
 
 function mapStateToProps(state) {
-  return { twats: state.dashboard.twats };
+  return {
+    currentUser: state.global.currentUser,
+    twats: state.dashboard.twats,
+  };
 }
 
 class Dashboard extends React.Component {
@@ -25,7 +28,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { twats } = this.props;
+    const { twats, currentUser } = this.props;
     const { troughLoading } = this.state;
 
     return (
@@ -38,8 +41,8 @@ class Dashboard extends React.Component {
               <div>
                 <i className="material-icons">face</i>
                 <div>
-                  <div className="display-name">Display Name</div>
-                  <div className="username">@username</div>
+                  <div className="display-name">{currentUser.displayName}</div>
+                  <div className="username">{`@${currentUser.username}`}</div>
                 </div>
               </div>
               <div className="user-stats">
@@ -49,7 +52,7 @@ class Dashboard extends React.Component {
                 </div>
                 <div className="user-stats-column">
                   <div>Following</div>
-                  <div>954</div>
+                  <div>{currentUser.following.length}</div>
                 </div>
               </div>
             </div>

@@ -1,7 +1,13 @@
 import { UPDATE_CURRENT_USER } from '../action-creators/action-types';
 
 const initialState = {
-  currentUser: null,
+  currentUser: {
+    userId: '',
+    username: '-',
+    displayName: '-',
+    bio: '...',
+    following: [],
+  },
 };
 
 export default function globalReducer(previousState = initialState, action) {
