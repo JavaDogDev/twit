@@ -65,8 +65,7 @@ twatsRouter.delete('/:id', async (req, res) => {
 twatsRouter.get('/dashboard-trough', async (req, res) => {
   let followedUserIds = [];
   try {
-    followedUserIds =
-      (await User.findOne({ userId: req.session.userId }).select('+following').exec()).following;
+    followedUserIds = (await User.findOne({ userId: req.session.userId }).select('+following').exec()).following;
   } catch (err) {
     console.error(`Couldn't get followed users: ${err}`);
   }
@@ -143,6 +142,44 @@ twatsRouter.get('/:id', async (req, res) => {
     return res.json({ twat });
   } catch (err) {
     console.error(`Error getting Twat with ID '${req.params.id}'\n${err}`);
+    res.status(400).end();
+  }
+});
+
+/**
+ * Like a Twat
+ * Replies with the updated Twat object.
+ */
+twatsRouter.post('/:id/like', async (req, res) => {
+  try {
+    await Twat.findOneAndUpdate(
+      { _id: req.params.id },
+      { $addToSet: { 'meta.likedBy': req.session.userId } });
+
+    const updatedTwat = await Twat.getTwatsWithUser(req.params.id);
+
+    return res.json({ twat: updatedTwat });
+  } catch (err) {
+    console.error(`Error liking Twat with ID '${req.params.id}' as user '${req.session.userId}'\n${err}`);
+    res.status(400).end();
+  }
+});
+
+/**
+ * Unlike a Twat
+ * Replies with the updated Twat object.
+ */
+twatsRouter.post('/:id/unlike', async (req, res) => {
+  try {
+    await Twat.findOneAndUpdate(
+      { _id: req.params.id },
+      { $pull: { 'meta.likedBy': req.session.userId } });
+
+    const updatedTwat = await Twat.getTwatsWithUser(req.params.id);
+
+    return res.json({ twat: updatedTwat });
+  } catch (err) {
+    console.error(`Error unliking Twat with ID '${req.params.id}' as user '${req.session.userId}'\n${err}`);
     res.status(400).end();
   }
 });

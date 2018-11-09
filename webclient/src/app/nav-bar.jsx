@@ -1,7 +1,9 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { Link, matchPath, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
+import { updateCurrentUserAsync } from '../action-creators/global-actions';
 import NavBarProfileDropdown from '../misc/nav-bar-profile-dropdown';
 import './nav-bar.scss';
 
@@ -23,6 +25,16 @@ class NavBar extends React.Component {
 
     this.onOpenDropdown = this.onOpenDropdown.bind(this);
     this.onCloseDropdown = this.onCloseDropdown.bind(this);
+  }
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+
+    /*
+    * Doing this here so that current user info gets updated in Redux regardless
+    * of which react-router path the (now-authenticated) user entered from.
+    */
+    dispatch(updateCurrentUserAsync());
   }
 
   onOpenDropdown() {
@@ -102,4 +114,4 @@ const SettingsMenu = ({ settingsDropdownOpen, onOpenDropdown, onCloseDropdown })
   </div>
 );
 
-export default withRouter(NavBar);
+export default connect()(withRouter(NavBar));

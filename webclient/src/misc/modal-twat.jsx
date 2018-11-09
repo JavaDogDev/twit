@@ -107,7 +107,7 @@ class ModalTwat extends React.Component {
           </div>
         </div>
 
-        {typeof twat.replyingTo !== 'string' ?
+        {typeof twat.replyingTo !== 'string' ? (
           <div className="inline-reply-editor">
             <i className="material-icons user-icon">face</i>
             <input
@@ -123,12 +123,13 @@ class ModalTwat extends React.Component {
               Twat
             </button>
           </div>
-        : null}
+        )
+          : null}
 
         <div>
           {this.state.repliesLoading
             ? <InlineLoadingSpinner />
-            : this.state.replies.map(reply => <ListTwat twat={reply} key={reply._id} hideReplyIcon />)}
+            : this.state.replies.map(reply => <ListTwat initialTwat={reply} key={reply._id} hideReplyIcon />)}
         </div>
       </div>
     );

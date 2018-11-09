@@ -1,5 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 
+/** Global Actions */
+export const UPDATE_CURRENT_USER = 'UPDATE_CURRENT_USER';
+
 /** Dashboard Actions */
 export const UPDATE_DASHBOARD_TROUGH = 'UPDATE_DASHBOARD_TROUGH';
 

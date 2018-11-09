@@ -3,11 +3,11 @@ const User = require('./user');
 
 function createTwatModel() {
   const twatSchema = mongoose.Schema({
-    // twats use Mongo's _id as identifiers
+    // twats use Mongo's _id as unique identifiers
     timestamp: { type: Date, default: () => Date.now(), required: true },
     twatText: { type: String, required: true },
     meta: {
-      likes: { type: Number, default: 0 },
+      likedBy: { type: [String], ref: 'User.userId' },
       retwats: { type: Number, default: 0 },
     },
     userId: { type: String, required: true, index: true },
