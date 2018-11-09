@@ -66,7 +66,7 @@ class App extends React.Component {
         <ModalRoute
           exact
           path="/twat/:twatId"
-          parentPath={this.props.lastLocation}
+          parentPath={this.props.lastLocation || '/'}
           className="react-router-modal__modal modal-twat"
           component={ModalTwat}
         />

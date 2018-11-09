@@ -36,6 +36,10 @@ $secondary-blue: #25364a;
   }
 }
 
+.react-router-modal__wrapper {
+  width: 100%;
+}
+
 .react-router-modal__container {
   position: fixed;
   top: 0; bottom: 0;
