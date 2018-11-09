@@ -107,21 +107,23 @@ class ModalTwat extends React.Component {
           </div>
         </div>
 
-        <div className="inline-reply-editor">
-          <i className="material-icons user-icon">face</i>
-          <input
-            type="text"
-            value={this.state.replyEditorText}
-            onChange={this.handleReplyInput}
-          />
-          <button
-            className="twat-button"
-            onClick={this.submitReply}
-            enabled={(this.state.replyEditorText.length > 0).toString()}
-          >
-            Twat
-          </button>
-        </div>
+        {typeof twat.replyingTo !== 'string' ?
+          <div className="inline-reply-editor">
+            <i className="material-icons user-icon">face</i>
+            <input
+              type="text"
+              value={this.state.replyEditorText}
+              onChange={this.handleReplyInput}
+            />
+            <button
+              className="twat-button"
+              onClick={this.submitReply}
+              enabled={(this.state.replyEditorText.length > 0).toString()}
+            >
+              Twat
+            </button>
+          </div>
+        : null}
 
         <div>
           {this.state.repliesLoading

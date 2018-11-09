@@ -17,11 +17,9 @@ function mapStateToProps(state) {
 }
 
 class UserPage extends React.Component {
-  componentWillMount() {
-    this.props.dispatch(setUserPageLoading());
-  }
-
   componentDidMount() {
+    this.props.dispatch(setUserPageLoading());
+
     const { username } = this.props.match.params;
     this.props.dispatch(updateUserPageAsync(username));
   }
@@ -67,15 +65,17 @@ class UserPage extends React.Component {
           </div>
         </div>
 
-        <div className="profile-content">
+        <main>
           <div className="profile-info">
-            Profile info here...
+            <div className="display-name">{user.displayName}</div>
+            <div className="username">@{user.username}</div>
+            <div className="bio">{user.bio}</div>
           </div>
 
           <Trough twats={userifiedTwats} isLoading={isLoading} />
 
           <Trends />
-        </div>
+        </main>
       </div>
     );
   }
