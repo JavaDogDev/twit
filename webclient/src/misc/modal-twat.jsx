@@ -3,6 +3,7 @@ import moment from 'moment';
 import axios from 'axios';
 
 import ListTwat from './list-twat';
+import UploadImageButton from './upload-image-button';
 import InlineLoadingSpinner from './inline-loading-spinner';
 import './modal-twat.scss';
 
@@ -138,6 +139,7 @@ class ModalTwat extends React.Component {
               value={replyEditorText}
               onChange={this.handleReplyInput}
             />
+            <UploadImageButton />
             <button
               type="button"
               className="twat-button"

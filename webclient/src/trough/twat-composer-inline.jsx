@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import { refreshDashboardTroughAsync } from '../action-creators/dashboard-actions';
+import UploadImageButton from '../misc/upload-image-button';
 import './twat-composer-inline.scss';
 
 class TwatComposerInline extends React.Component {
@@ -39,6 +40,7 @@ class TwatComposerInline extends React.Component {
           placeholder="Don't think, just type."
           onChange={this.handleComposerInput}
         />
+        <UploadImageButton />
         <button
           type="button"
           className="twat-button"

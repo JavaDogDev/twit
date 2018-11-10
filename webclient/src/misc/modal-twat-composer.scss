@@ -1,6 +1,11 @@
 @import './global';
 
 .modal-twat-composer {
+  display: grid;
+  grid-template-columns: 1fr 10fr 2fr;
+  grid-auto-rows: 1fr 2fr 1fr;
+  grid-gap: 0.5em 0.5em;
+
   position: fixed;
   top: 13%;
   left: 50%;
@@ -10,6 +15,9 @@
   border-radius: 6px;
 
   .title {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    align-self: center;
     padding: 1em;
     background-color: darken($secondary-blue, 10%);
     border-bottom: 1px solid lighten($secondary-blue, 20%);
@@ -21,43 +29,53 @@
     }
   }
 
-  .contents {
-    display: flex;
-    padding: 1em;
+  i {
+    color: $inactive;
+  }
 
-    i {
-      color: $inactive;
-      font-size: 32px;
-      margin-right: 0.25em;
+  .avatar {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    margin-left: 0.5em;
+    font-size: 32px;
+  }
+
+  textarea {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    width: calc(100% - 0.5em);
+    min-height: 5em;
+    line-height: 14px;
+    font-family: inherit;
+    font-size: 0.775rem;
+    border: 1px solid darken(#3f73b9, 20%);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: white;
+    resize: none;
+    background-color: darken(#25364a, 10%);
+
+    &:focus {
+      outline: none;
+      border: 2px solid #3f73b9;
     }
   }
 
-  .contents-right-column {
-    display: flex;
-    flex-flow: column nowrap;
-    width: 100%;
+  .📷 {
+    grid-column: 2 / 3;
+    grid-row: 3;
+    justify-self: start;
 
-    textarea {
-      width: 100%;
-      min-height: 5em;
-      line-height: 14px;
-      font-family: inherit;
-      font-size: 0.775rem;
-      border: 1px solid darken(#3f73b9, 20%);
-      border-radius: 8px;
-      padding: 8px 14px;
-      color: white;
-      resize: none;
-      background-color: darken(#25364a, 10%);
-
-      &:focus {
-        outline: none;
-        border: 2px solid #3f73b9;
-      }
+    i {
+      font-size: 2em;
     }
+  }
 
-    .twat-button {
-      margin: 0.5em 0 0 auto;
-    }
+  .twat-button {
+    grid-column: 3;
+    grid-row: 3;
+    width: 7em;
+    height: 2.9em;
+    margin-right: 0.5em;
   }
 }

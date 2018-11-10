@@ -81,11 +81,12 @@ fileUploadRouter.post('/four-images', (req, res) => {
     // Rename each temp file to [hash].[appropriateExtension]
     // Existing files will be overwritten
     Promise.all(req.files.map((file, index) => {
-      const newPath = path.join(file.destination, `${imageHashes[index]}.${fileTypes[index].ext}`);
+      const newFilename = `${imageHashes[index]}.${fileTypes[index].ext}`;
+      const newPath = path.join(file.destination, newFilename);
       rename(file.path, newPath);
-      return newPath;
+      return newFilename;
     }))
-      .then(imagePaths => res.json({ imagePaths }))
+      .then(images => res.json({ images }))
       .catch((e) => {
         console.error(`Couldn't rename temporary uploaded image:\n\t${e}`);
         deleteTempUploads();

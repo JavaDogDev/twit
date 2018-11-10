@@ -22,6 +22,10 @@ $inactive: #757575;
 $active-blue: #03A9F4;
 $secondary-blue: #25364a;
 
+i.material-icons {
+  color: $inactive;
+}
+
 .twat-button {
   color: white;
   border: none;

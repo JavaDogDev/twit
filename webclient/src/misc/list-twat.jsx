@@ -89,7 +89,7 @@ class ListTwat extends React.Component {
               {twat.meta.retwats}
             </span>
             <span onClick={currentUserLiked ? this.unlikeTwat : this.likeTwat} role="button" tabIndex="0">
-              <i className="material-icons" style={currentUserLiked ? { color: '#754e4e' } : null}>
+              <i className="material-icons" style={currentUserLiked ? { color: '#a97781' } : null}>
                 {currentUserLiked ? 'favorite' : 'favorite_border'}
               </i>
               {twat.meta.likedBy.length}

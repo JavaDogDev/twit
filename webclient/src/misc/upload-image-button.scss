@@ -1,0 +1,14 @@
+.📷 {
+  display: inline-flex;
+  cursor: pointer;
+
+  &:hover {
+    i {
+      color: #a5a5a5;
+    }
+  }
+
+  i {
+    transition: 0.25s color ease-out;
+  }
+}
