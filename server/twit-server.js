@@ -8,6 +8,7 @@ const verifyAuthentication = require('./verify-authentication');
 const loginRouter = require('./api/login');
 const twatsRouter = require('./api/twats');
 const usersRouter = require('./api/users');
+const fileUploadRouter = require('./api/file-upload');
 
 const app = express();
 
@@ -44,6 +45,7 @@ const app = express();
   /* Authenticated API endpoints */
   app.use('/api/twats', twatsRouter);
   app.use('/api/users', usersRouter);
+  app.use('/api/uploads', fileUploadRouter);
 
   // If no other route matches, send GET requests to index.html
   app.get('/*', (req, res) => res.sendFile(
