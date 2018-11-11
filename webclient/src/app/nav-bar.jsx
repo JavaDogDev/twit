@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Link, matchPath, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { updateCurrentUserAsync } from '../action-creators/global-actions';
+import { updateCurrentUserAsync, showModalTwatComposer } from '../action-creators/global-actions';
 import NavBarProfileDropdown from '../misc/nav-bar-profile-dropdown';
 import './nav-bar.scss';
 
@@ -25,6 +25,7 @@ class NavBar extends React.Component {
 
     this.onOpenDropdown = this.onOpenDropdown.bind(this);
     this.onCloseDropdown = this.onCloseDropdown.bind(this);
+    this.showModalTwatComposer = this.showModalTwatComposer.bind(this);
   }
 
   componentDidMount() {
@@ -45,8 +46,13 @@ class NavBar extends React.Component {
     this.setState({ settingsDropdownOpen: false });
   }
 
+  showModalTwatComposer() {
+    const { dispatch } = this.props;
+    dispatch(showModalTwatComposer());
+  }
+
   render() {
-    const { location, showModalTwatComposer } = this.props;
+    const { location } = this.props;
     const { settingsDropdownOpen } = this.state;
     const path = location.pathname;
 
@@ -82,7 +88,7 @@ class NavBar extends React.Component {
             className="twat-button"
             role="button"
             tabIndex={0}
-            onClick={showModalTwatComposer}
+            onClick={this.showModalTwatComposer}
           >
             Twat
           </div>
@@ -116,4 +122,4 @@ const SettingsMenu = ({ settingsDropdownOpen, onOpenDropdown, onCloseDropdown })
   </div>
 );
 
-export default connect()(withRouter(NavBar));
+export default withRouter(connect()(NavBar));

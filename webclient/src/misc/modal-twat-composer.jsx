@@ -3,6 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { Modal } from 'react-router-modal';
 
+import { hideModalTwatComposer } from '../action-creators/global-actions';
 import { refreshDashboardTroughAsync } from '../action-creators/dashboard-actions';
 import UploadImageButton from './upload-image-button';
 import './modal-twat-composer.scss';
@@ -14,6 +15,7 @@ class ModalTwatComposer extends React.Component {
 
     this.handleTextInput = this.handleTextInput.bind(this);
     this.submitNewTwat = this.submitNewTwat.bind(this);
+    this.hideModalTwatComposer = this.hideModalTwatComposer.bind(this);
   }
 
   handleTextInput(event) {
@@ -21,22 +23,27 @@ class ModalTwatComposer extends React.Component {
   }
 
   submitNewTwat() {
-    const { dispatch, hideModalTwatComposer } = this.props;
+    const { dispatch } = this.props;
     const { twatText } = this.state;
     axios.post('/api/twats', { twatText })
       .then(() => { this.setState({ twatText: '' }); })
       .then(dispatch(refreshDashboardTroughAsync()))
-      .then(() => hideModalTwatComposer())
+      .then(() => this.hideModalTwatComposer())
       .catch(err => console.error(`Error submitting new Twat: ${err}`));
   }
 
+  hideModalTwatComposer() {
+    const { dispatch } = this.props;
+    dispatch(hideModalTwatComposer());
+  }
+
   render() {
-    const { visible, hideModalTwatComposer } = this.props;
+    const { visible } = this.props;
     const { twatText } = this.state;
 
     if (visible) {
       return (
-        <Modal className="modal-twat-composer" onBackdropClick={hideModalTwatComposer}>
+        <Modal className="modal-twat-composer" onBackdropClick={this.hideModalTwatComposer}>
           <div className="title"><h3>Compose new Twat</h3></div>
           <i className="material-icons avatar">face</i>
           <UploadImageButton />

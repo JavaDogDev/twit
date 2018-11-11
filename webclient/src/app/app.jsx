@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { withLastLocation } from 'react-router-last-location';
 import { ModalContainer, ModalRoute } from 'react-router-modal';
 import 'react-router-modal/css/react-router-modal.css';
@@ -15,20 +16,22 @@ import UserPage from './user-page';
 import Dashboard from './dashboard';
 import ModalTwat from '../misc/modal-twat';
 import RenderBlocker from '../misc/render-blocker';
+import UploadImageModal from '../misc/upload-image-modal';
 import ModalTwatComposer from '../misc/modal-twat-composer';
 
 import './app.scss';
 
+function mapStateToProps(state) {
+  return {
+    twatComposerOpen: state.global.twatComposerOpen,
+    imageUploadModalOpen: state.global.imageUploadModalOpen,
+  };
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      shouldPageUpdate: true,
-      twatComposerOpen: false,
-    };
-
-    this.hideModalTwatComposer = this.hideModalTwatComposer.bind(this);
-    this.showModalTwatComposer = this.showModalTwatComposer.bind(this);
+    this.state = { shouldPageUpdate: true };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,22 +45,19 @@ class App extends React.Component {
     }
   }
 
-  hideModalTwatComposer() {
-    this.setState({ twatComposerOpen: false });
-  }
-
-  showModalTwatComposer() {
-    this.setState({ twatComposerOpen: true });
-  }
-
   render() {
-    const { location, lastLocation } = this.props;
-    const { shouldPageUpdate, twatComposerOpen } = this.state;
+    const { shouldPageUpdate } = this.state;
+    const {
+      location,
+      lastLocation,
+      twatComposerOpen,
+      imageUploadModalOpen,
+    } = this.props;
 
     return (
       <div>
         {location.pathname !== '/login'
-          ? <NavBar showModalTwatComposer={this.showModalTwatComposer} />
+          ? <NavBar />
           : null}
 
         <RenderBlocker block={!shouldPageUpdate}>
@@ -68,10 +68,9 @@ class App extends React.Component {
           </Switch>
         </RenderBlocker>
 
-        <ModalTwatComposer
-          visible={twatComposerOpen}
-          hideModalTwatComposer={this.hideModalTwatComposer}
-        />
+        <ModalTwatComposer visible={twatComposerOpen} />
+
+        <UploadImageModal visible={imageUploadModalOpen} />
 
         <ModalRoute
           exact
@@ -87,4 +86,4 @@ class App extends React.Component {
   }
 }
 
-export default withLastLocation(withRouter(App));
+export default withLastLocation(withRouter(connect(mapStateToProps)(App)));

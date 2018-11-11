@@ -45,6 +45,10 @@ a.nav-button {
   &.active, &:hover {
     color: $active-blue;
     border-bottom: 2px solid $active-blue;
+
+    i {
+      color: $active-blue;
+    }
   }
 
   &:hover {
