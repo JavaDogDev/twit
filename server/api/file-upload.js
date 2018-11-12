@@ -7,6 +7,9 @@ const multer = require('multer');
 const readChunk = require('read-chunk');
 const imageType = require('image-type');
 
+const Upload = require('../database/upload');
+const ImageAttachment = require('../database/image-attachment');
+
 const fileUploadRouter = express.Router();
 
 const ALLOWED_IMAGE_FORMATS = ['bmp', 'jpg', 'jpeg', 'png', 'gif', 'webp'];
@@ -33,6 +36,28 @@ function deleteFiles(paths) {
   Promise.all(paths.map(p => unlink(p)))
     .catch(err => console.error(`Couldn't delete files:\n\t${paths.join('\n\t')}\n${err}`));
 }
+
+fileUploadRouter.delete('/image-attachment/:id', async (req, res) => {
+  // TODO: only allow delete if ImageAttachment isn't used by a Twat
+  // (Twat deletion will take care of that)
+  try {
+    const attachment = await ImageAttachment.findOne({ _id: req.params.id }).exec();
+    if (!attachment) {
+      throw new Error(`An ImageAttachment with ID '${req.params.id}' does not exist.`);
+    }
+
+    // Ensure current user owns this ImageAttachment
+    if (attachment.userId !== req.session.userId) {
+      return res.status(401).end();
+    }
+
+    await attachment.deleteAttachment();
+    return res.status(200).end();
+  } catch (error) {
+    console.error(`Couldn't delete ImageAttachment '${req.params.id}':\n\t${error}`);
+    return res.status(500).end();
+  }
+});
 
 /**
  * Accepts image uploads
@@ -91,9 +116,33 @@ fileUploadRouter.post('/four-images', (req, res) => {
 
       return newFilename;
     }))
-      .then(images => res.json({ images }))
+      .then(fileNames => (
+        Promise.all(fileNames.map(fileName => (
+          new Promise(async (resolve, reject) => {
+            try {
+              const options = { upsert: true, new: true, setDefaultsOnInsert: true };
+              const uploadRecord = await Upload.findOneAndUpdate({ type: 'IMAGE', fileName }, {}, options).exec();
+              return resolve(uploadRecord._id);
+            } catch (e) {
+              // Ignore duplicate key errors because we can throw out the new doc in this case
+              // (findOneAndUpdate isn't atomic so this problem is unavoidable)
+              if (e.code === 11000) {
+                const existingDoc = await Upload.findOne({ type: 'IMAGE', fileName }).exec();
+                return resolve(existingDoc._id);
+              }
+
+              console.error(`Couldn't create DB Upload records for files: ${fileNames}\n\t${e}`);
+              return reject(e);
+            }
+          })
+        )))
+      ))
+      .then(async (uploadIDs) => {
+        const imageAttachment = await new ImageAttachment({ userId: req.session.userId, images: uploadIDs }).save();
+        return res.json({ imageAttachment: imageAttachment._id });
+      })
       .catch((e) => {
-        console.error(`Couldn't rename temporary uploaded image:\n\t${e}`);
+        console.error(`Error while uploading images:\n\t${e}`);
         deleteTempUploads();
         return res.status(500).end();
       });

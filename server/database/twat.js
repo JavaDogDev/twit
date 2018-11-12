@@ -12,6 +12,7 @@ function createTwatModel() {
     },
     userId: { type: String, required: true, index: true },
     replyingTo: { type: mongoose.Schema.Types.ObjectId, ref: 'Twat' },
+    images: { type: mongoose.Schema.Types.ObjectId, ref: 'ImageAttachment' },
   });
 
   /**
