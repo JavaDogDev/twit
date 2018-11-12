@@ -8,24 +8,18 @@ const UPLOAD_PATHS = {
   Images: path.join(process.cwd(), '/uploads/images/'),
 };
 
-const unlink = util.promisify(fs.unlink);
-
 /**
  * Deletes a file.
  * @param String path to the file
  */
-function deleteFromDisk(path) {
-  return unlink(path);
+function deleteFromDisk(filePath) {
+  return util.promisify(fs.unlink)(filePath);
 }
 
 function createUploadModel() {
   const uploadSchema = mongoose.Schema({
     fileName: { type: String, index: { unique: true } },
     type: { type: String, enum: UPLOAD_TYPES },
-  });
-
-  uploadSchema.pre('save', function preSave() {
-    // todo: handle save to filesystem
   });
 
   /** @returns absolute path for an uploaded image */

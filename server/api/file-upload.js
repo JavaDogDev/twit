@@ -103,7 +103,7 @@ fileUploadRouter.post('/four-images', (req, res) => {
     }
 
     // Rename each temp file to [hash].[appropriateExtension]
-    Promise.all(req.files.map((file, index) => {
+    return Promise.all(req.files.map((file, index) => {
       const newFilename = `${imageHashes[index]}.${fileTypes[index].ext}`;
       const newPath = path.join(file.destination, newFilename);
 
