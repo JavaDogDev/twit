@@ -16,7 +16,6 @@ const imageUpload = multer({
 }).array('images', 4);
 
 const unlink = util.promisify(fs.unlink);
-const rename = util.promisify(fs.rename);
 
 const sha1 = filePath => new Promise((resolve, reject) => {
   const hash = crypto.createHash('sha1');
@@ -79,11 +78,17 @@ fileUploadRouter.post('/four-images', (req, res) => {
     }
 
     // Rename each temp file to [hash].[appropriateExtension]
-    // Existing files will be overwritten
     Promise.all(req.files.map((file, index) => {
       const newFilename = `${imageHashes[index]}.${fileTypes[index].ext}`;
       const newPath = path.join(file.destination, newFilename);
-      rename(file.path, newPath);
+
+      // Don't try to rename into a file that already exists
+      if (fs.existsSync(newPath)) {
+        deleteFiles([file.path]);
+      } else {
+        fs.renameSync(file.path, newPath);
+      }
+
       return newFilename;
     }))
       .then(images => res.json({ images }))
