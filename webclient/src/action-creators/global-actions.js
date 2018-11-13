@@ -5,6 +5,7 @@ import {
   UPDATE_CURRENT_USER,
   SHOW_IMAGE_UPLOAD_MODAL,
   HIDE_IMAGE_UPLOAD_MODAL,
+  SET_IMAGE_ATTACHMENT_ID,
   SHOW_MODAL_TWAT_COMPOSER,
   HIDE_MODAL_TWAT_COMPOSER,
 } from './action-types';
@@ -37,4 +38,8 @@ export function showImageUploadModal() {
 
 export function hideImageUploadModal() {
   return { type: HIDE_IMAGE_UPLOAD_MODAL };
+}
+
+export function setImageAttachmentId(id) {
+  return { type: SET_IMAGE_ATTACHMENT_ID, payload: id };
 }

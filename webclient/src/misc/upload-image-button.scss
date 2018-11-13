@@ -12,3 +12,26 @@
     transition: 0.25s color ease-out;
   }
 }
+
+.image-attachment {
+  display: flex;
+  align-items: center;
+  font-size: 0.7rem;
+  border-radius: 2em;
+  margin-right: 0.8em;
+  padding-right: 1em;
+  white-space: nowrap;
+  background-color: orangered;
+  cursor: pointer;
+  transition: 0.25s background-color ease-out;
+
+  &:hover {
+    background-color: darken(orangered, 10%);
+  }
+
+  i.material-icons {
+    color: white;
+    font-size: 1.5rem;
+    margin-right: 0.25em;
+  }
+}

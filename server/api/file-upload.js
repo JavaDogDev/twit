@@ -62,6 +62,8 @@ fileUploadRouter.delete('/image-attachment/:id', async (req, res) => {
 /**
  * Accepts image uploads
  * (you can only upload four images at a time, no more no less)
+ *
+ * TODO: occasionally scan DB for stray images not attached to any Twat and remove them
  */
 fileUploadRouter.post('/four-images', (req, res) => {
   // Accept image upload...

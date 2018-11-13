@@ -4,6 +4,7 @@ import {
   HIDE_IMAGE_UPLOAD_MODAL,
   SHOW_MODAL_TWAT_COMPOSER,
   HIDE_MODAL_TWAT_COMPOSER,
+  SET_IMAGE_ATTACHMENT_ID,
 } from '../action-creators/action-types';
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
 
   twatComposerOpen: false,
   imageUploadModalOpen: false,
+  imageAttachmentId: null,
 };
 
 export default function globalReducer(previousState = initialState, action) {
@@ -24,6 +26,7 @@ export default function globalReducer(previousState = initialState, action) {
     case UPDATE_CURRENT_USER: return { ...previousState, currentUser: action.payload };
     case SHOW_IMAGE_UPLOAD_MODAL: return { ...previousState, imageUploadModalOpen: true };
     case HIDE_IMAGE_UPLOAD_MODAL: return { ...previousState, imageUploadModalOpen: false };
+    case SET_IMAGE_ATTACHMENT_ID: return { ...previousState, imageAttachmentId: action.payload };
     case SHOW_MODAL_TWAT_COMPOSER: return { ...previousState, twatComposerOpen: true };
     case HIDE_MODAL_TWAT_COMPOSER: return { ...previousState, twatComposerOpen: false };
     default: return previousState;

@@ -71,7 +71,15 @@
     }
   }
 
+  .image-attachment {
+    grid-column: 2 / 3;
+    grid-row: 3;
+    align-self: center;
+    justify-self: start;
+  }
+
   .twat-button {
+    align-self: center;
     grid-column: 3;
     grid-row: 3;
     width: 7em;

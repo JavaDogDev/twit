@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Modal } from 'react-router-modal';
 
 import InlineLoadingSpinner from './inline-loading-spinner';
-import { hideImageUploadModal } from '../action-creators/global-actions';
+import { hideImageUploadModal, setImageAttachmentId } from '../action-creators/global-actions';
 
 import './upload-image-modal.scss';
 
@@ -102,6 +102,7 @@ class UploadImageModal extends React.Component {
   onUpload() {
     this.setState({ uploading: true });
 
+    const { dispatch } = this.props;
     const { images } = this.state;
     const uploadData = new FormData();
     images.forEach(i => uploadData.append('images', i));
@@ -116,7 +117,8 @@ class UploadImageModal extends React.Component {
     axios
       .post('/api/uploads/four-images', uploadData, config)
       .then((res) => {
-
+        dispatch(setImageAttachmentId(res.data.imageAttachment));
+        dispatch(hideImageUploadModal());
       })
       .catch(e => console.error(`Problem while uploading images:\n\t${e}`));
   }
