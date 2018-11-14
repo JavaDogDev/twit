@@ -1,7 +1,8 @@
+import axios from 'axios';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { showImageUploadModal } from '../action-creators/global-actions';
+import { showImageUploadModal, setImageAttachmentId } from '../action-creators/global-actions';
 
 import './upload-image-button.scss';
 
@@ -15,6 +16,7 @@ class UploadImageButton extends React.Component {
   constructor() {
     super();
     this.showImageUploadModal = this.showImageUploadModal.bind(this);
+    this.cancelImageAttachment = this.cancelImageAttachment.bind(this);
   }
 
   showImageUploadModal() {
@@ -22,12 +24,20 @@ class UploadImageButton extends React.Component {
     dispatch(showImageUploadModal());
   }
 
+  cancelImageAttachment() {
+    const { dispatch, imageAttachmentId } = this.props;
+
+    axios.delete(`/api/uploads/image-attachment/${imageAttachmentId}`)
+      .then(dispatch(setImageAttachmentId(null)))
+      .catch(e => console.error(`Couldn't delete image attachment:\n\t${e}`));
+  }
+
   render() {
     const { imageAttachmentId } = this.props;
 
     if (imageAttachmentId !== null) {
       return (
-        <span className="image-attachment">
+        <span className="image-attachment" role="button" tabIndex="0" onClick={this.cancelImageAttachment}>
           <i className="material-icons">highlight_off</i>
           +4 images
         </span>

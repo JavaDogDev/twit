@@ -13,6 +13,7 @@ twatsRouter.use(bodyParser.json());
 twatsRouter.post('/', async (req, res) => {
   const newTwat = new Twat({
     twatText: req.body.twatText,
+    images: req.body.imageAttachmentId,
     userId: req.session.userId,
   });
 

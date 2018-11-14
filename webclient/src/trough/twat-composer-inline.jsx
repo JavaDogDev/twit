@@ -2,9 +2,16 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import { setImageAttachmentId } from '../action-creators/global-actions';
 import { refreshDashboardTroughAsync } from '../action-creators/dashboard-actions';
 import UploadImageButton from '../misc/upload-image-button';
 import './twat-composer-inline.scss';
+
+function mapStateToProps(state) {
+  return {
+    imageAttachmentId: state.global.imageAttachmentId,
+  };
+}
 
 class TwatComposerInline extends React.Component {
   constructor() {
@@ -19,11 +26,17 @@ class TwatComposerInline extends React.Component {
   }
 
   submitNewTwat() {
-    const { dispatch } = this.props;
+    const { dispatch, imageAttachmentId } = this.props;
     const { composerText } = this.state;
-    const twatText = composerText;
-    axios.post('/api/twats', { twatText })
+
+    const postData = { twatText: composerText };
+    if (imageAttachmentId !== null) {
+      postData.imageAttachmentId = imageAttachmentId;
+    }
+
+    axios.post('/api/twats', postData)
       .then(() => { this.setState({ composerText: '' }); })
+      .then(dispatch(setImageAttachmentId(null)))
       .then(dispatch(refreshDashboardTroughAsync()))
       .catch(err => console.error(`Error submitting new Twat: ${err}`));
   }
@@ -55,4 +68,4 @@ class TwatComposerInline extends React.Component {
   }
 }
 
-export default connect()(TwatComposerInline);
+export default connect(mapStateToProps)(TwatComposerInline);

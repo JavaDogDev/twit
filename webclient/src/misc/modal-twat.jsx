@@ -1,11 +1,19 @@
 import * as React from 'react';
 import moment from 'moment';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 import ListTwat from './list-twat';
 import UploadImageButton from './upload-image-button';
 import InlineLoadingSpinner from './inline-loading-spinner';
+import { setImageAttachmentId } from '../action-creators/global-actions';
 import './modal-twat.scss';
+
+function mapStateToProps(state) {
+  return {
+    imageAttachmentId: state.global.imageAttachmentId,
+  };
+}
 
 class ModalTwat extends React.Component {
   constructor() {
@@ -63,10 +71,17 @@ class ModalTwat extends React.Component {
   }
 
   submitReply() {
+    const { dispatch, imageAttachmentId } = this.props;
     const { replyEditorText, twat } = this.state;
 
-    axios.post('/api/twats', { twatText: replyEditorText, replyingTo: twat._id })
+    const postData = { twatText: replyEditorText, replyingTo: twat._id };
+    if (imageAttachmentId !== null) {
+      postData.imageAttachmentId = imageAttachmentId;
+    }
+
+    axios.post('/api/twats', postData)
       .then(() => this.setState({ replyEditorText: '' }))
+      .then(dispatch(setImageAttachmentId(null)))
       .then(this.refreshReplies)
       .catch(err => console.error(`Error submitting reply: ${err}`));
   }
@@ -161,4 +176,4 @@ class ModalTwat extends React.Component {
   }
 }
 
-export default ModalTwat;
+export default connect(mapStateToProps)(ModalTwat);

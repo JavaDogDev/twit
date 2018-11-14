@@ -3,10 +3,16 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { Modal } from 'react-router-modal';
 
-import { hideModalTwatComposer } from '../action-creators/global-actions';
+import { hideModalTwatComposer, setImageAttachmentId } from '../action-creators/global-actions';
 import { refreshDashboardTroughAsync } from '../action-creators/dashboard-actions';
 import UploadImageButton from './upload-image-button';
 import './modal-twat-composer.scss';
+
+function mapStateToProps(state) {
+  return {
+    imageAttachmentId: state.global.imageAttachmentId,
+  };
+}
 
 class ModalTwatComposer extends React.Component {
   constructor() {
@@ -23,10 +29,17 @@ class ModalTwatComposer extends React.Component {
   }
 
   submitNewTwat() {
-    const { dispatch } = this.props;
+    const { dispatch, imageAttachmentId } = this.props;
     const { twatText } = this.state;
-    axios.post('/api/twats', { twatText })
+
+    const postData = { twatText };
+    if (imageAttachmentId !== null) {
+      postData.imageAttachmentId = imageAttachmentId;
+    }
+
+    axios.post('/api/twats', postData)
       .then(() => { this.setState({ twatText: '' }); })
+      .then(dispatch(setImageAttachmentId(null)))
       .then(dispatch(refreshDashboardTroughAsync()))
       .then(() => this.hideModalTwatComposer())
       .catch(err => console.error(`Error submitting new Twat: ${err}`));
@@ -57,4 +70,4 @@ class ModalTwatComposer extends React.Component {
   }
 }
 
-export default connect()(ModalTwatComposer);
+export default connect(mapStateToProps)(ModalTwatComposer);
