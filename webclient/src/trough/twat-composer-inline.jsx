@@ -19,7 +19,8 @@ class TwatComposerInline extends React.Component {
   }
 
   submitNewTwat() {
-    const { dispatch, composerText } = this.state;
+    const { dispatch } = this.props;
+    const { composerText } = this.state;
     const twatText = composerText;
     axios.post('/api/twats', { twatText })
       .then(() => { this.setState({ composerText: '' }); })

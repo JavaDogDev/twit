@@ -7,6 +7,7 @@ const multer = require('multer');
 const readChunk = require('read-chunk');
 const imageType = require('image-type');
 
+const Twat = require('../database/twat');
 const Upload = require('../database/upload');
 const ImageAttachment = require('../database/image-attachment');
 
@@ -37,26 +38,38 @@ function deleteFiles(paths) {
     .catch(err => console.error(`Couldn't delete files:\n\t${paths.join('\n\t')}\n${err}`));
 }
 
-fileUploadRouter.delete('/image-attachment/:id', async (req, res) => {
+/**
+ * Deletes an ImageAttachment from the DB, along with
+ * all images it uses (as long as they're not used elsewhere)
+ */
+async function deleteImageAttachment(attachmentId, currentUserId) {
   // TODO: only allow delete if ImageAttachment isn't used by a Twat
-  // (Twat deletion will take care of that)
-  try {
-    const attachment = await ImageAttachment.findOne({ _id: req.params.id }).exec();
-    if (!attachment) {
-      throw new Error(`An ImageAttachment with ID '${req.params.id}' does not exist.`);
-    }
-
-    // Ensure current user owns this ImageAttachment
-    if (attachment.userId !== req.session.userId) {
-      return res.status(401).end();
-    }
-
-    await attachment.deleteAttachment();
-    return res.status(200).end();
-  } catch (error) {
-    console.error(`Couldn't delete ImageAttachment '${req.params.id}':\n\t${error}`);
-    return res.status(500).end();
+  const attachment = await ImageAttachment.findOne({ _id: attachmentId }).exec();
+  if (!attachment) {
+    throw new Error(`An ImageAttachment with ID '${attachmentId}' does not exist.`);
   }
+
+  // Ensure current user owns this ImageAttachment
+  if (attachment.userId !== currentUserId) {
+    return Promise.reject(
+      new Error(`User ${currentUserId} is not allowed to delete ImageAttachment '${attachmentId}'`));
+  }
+
+  if (await Twat.countDocuments({ images: attachmentId }).exec() > 0) {
+    return Promise.reject(
+      new Error(`Can't delete ImageAttachment '${attachmentId}' as it's referenced by a Twat`));
+  }
+
+  return attachment.deleteAttachment();
+}
+
+fileUploadRouter.delete('/image-attachment/:id', async (req, res) => {
+  deleteImageAttachment(req.params.id, req.session.userId)
+    .then(() => res.status(200).end())
+    .catch((err) => {
+      console.error(`Couldn't delete ImageAttachment '${req.params.id}':\n\t${err}`);
+      return res.status(500).end();
+    });
 });
 
 /**
@@ -151,4 +164,4 @@ fileUploadRouter.post('/four-images', (req, res) => {
   });
 });
 
-module.exports = fileUploadRouter;
+module.exports = { deleteImageAttachment, fileUploadRouter };

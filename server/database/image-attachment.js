@@ -25,7 +25,7 @@ function createImageAttachmentModel() {
       }
     });
 
-    Promise.all(imagesToPotentiallyDelete.map(async imageId => Upload.findOne({ _id: imageId })))
+    return Promise.all(imagesToPotentiallyDelete.map(async imageId => Upload.findOne({ _id: imageId })))
       .then(images => Promise.all(images.map(async (imageDoc) => {
         try {
           // Remove Upload DB record and file for this image if it's not used elsewhere

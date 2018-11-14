@@ -8,7 +8,7 @@ const verifyAuthentication = require('./verify-authentication');
 const loginRouter = require('./api/login');
 const twatsRouter = require('./api/twats');
 const usersRouter = require('./api/users');
-const fileUploadRouter = require('./api/file-upload');
+const { fileUploadRouter } = require('./api/file-upload');
 
 const app = express();
 

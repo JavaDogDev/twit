@@ -1,8 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const flatten = require('array-flatten');
+
 const User = require('../database/user');
 const Twat = require('../database/twat');
+const { deleteImageAttachment } = require('./file-upload');
 
 const twatsRouter = express.Router();
 twatsRouter.use(bodyParser.json());
@@ -38,25 +40,36 @@ twatsRouter.post('/', async (req, res) => {
 });
 
 /* Deletion endpoint */
-twatsRouter.delete('/:id', async (req, res) => {
+twatsRouter.delete('/:id', (req, res) => (
   // Make sure current user can delete this twat
-  Promise.all([
-    User.findOne({ userId: req.session.userId }).exec(),
-    Twat.findById(req.params.id),
-  ])
-    .then(([user, twat]) => {
-      if (user.userId === twat.userId) {
-        twat.remove();
-        return res.status(200).end();
+  Twat.findById(req.params.id).exec()
+    .then(async (twat) => {
+      if (twat === null) {
+        return Promise.reject(
+          new Error(`Couldn't find Twat with ID '${req.params.id}'`));
       }
-      console.log(`User "${user.username}" not authorized to delete Twat ${twat._id}`);
-      return res.status(401).end();
+
+      if (req.session.userId === twat.userId) {
+        // Check if there's any ImageAttachment referenced by this Twat to delete it also
+        const { images } = twat;
+        await twat.remove();
+        return images;
+      }
+      return Promise.reject(
+        new Error(`UserID '${req.session.userId}' not authorized to delete Twat '${twat._id}'`));
+    })
+    .then(async (imageAttachmentId) => {
+      // Delete any ImageAttachment
+      if (typeof imageAttachmentId !== 'undefined') {
+        await deleteImageAttachment(imageAttachmentId.toString(), req.session.userId);
+      }
+      return res.status(200).end();
     })
     .catch((err) => {
       console.log(`Error while deleting twat: ${err}`);
       res.status(500).end();
-    });
-});
+    })
+));
 
 /*
   Get twats from followed users and self to populate trough on dashboard page
