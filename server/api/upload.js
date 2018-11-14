@@ -11,15 +11,13 @@ const Twat = require('../database/twat');
 const Upload = require('../database/upload');
 const ImageAttachment = require('../database/image-attachment');
 
-const fileUploadRouter = express.Router();
+const uploadRouter = express.Router();
 
 const ALLOWED_IMAGE_FORMATS = ['bmp', 'jpg', 'jpeg', 'png', 'gif', 'webp'];
 const imageUpload = multer({
   dest: path.join(process.cwd(), '/uploads/images/'),
   limits: { fileSize: 2097152 },
 }).array('images', 4);
-
-const unlink = util.promisify(fs.unlink);
 
 const sha1 = filePath => new Promise((resolve, reject) => {
   const hash = crypto.createHash('sha1');
@@ -29,12 +27,34 @@ const sha1 = filePath => new Promise((resolve, reject) => {
   rs.on('end', () => resolve(hash.digest('hex')));
 });
 
+uploadRouter.get('/image-attachment/:id', async (req, res) => {
+  let attachment;
+  try {
+    attachment = await ImageAttachment.findById(req.params.id).exec();
+    if (attachment === null) {
+      return res.status(404).end();
+    }
+  } catch (err) {
+    console.error(`Error while getting data for ImageAttachment '${req.params.id}':\n\t${err}'`);
+    return res.status(500).end();
+  }
+
+  const imageUrls = await Promise.all(attachment.images.map(uploadId => Upload.findById(uploadId).exec()))
+    .then(uploads => uploads.map(upload => `/uploads/images/${upload.fileName}`))
+    .catch((err) => {
+      console.error(`Error getting Upload fileNames:\n\t${err}`);
+      return res.status(500).end();
+    });
+
+  return res.json(imageUrls);
+});
+
 /**
  * Deletes multiple files.
  * @param {Array<String>} paths to the files
  */
 function deleteFiles(paths) {
-  Promise.all(paths.map(p => unlink(p)))
+  Promise.all(paths.map(p => util.promisify(fs.unlink)(p)))
     .catch(err => console.error(`Couldn't delete files:\n\t${paths.join('\n\t')}\n${err}`));
 }
 
@@ -63,7 +83,7 @@ async function deleteImageAttachment(attachmentId, currentUserId) {
   return attachment.deleteAttachment();
 }
 
-fileUploadRouter.delete('/image-attachment/:id', async (req, res) => {
+uploadRouter.delete('/image-attachment/:id', async (req, res) => {
   deleteImageAttachment(req.params.id, req.session.userId)
     .then(() => res.status(200).end())
     .catch((err) => {
@@ -78,7 +98,7 @@ fileUploadRouter.delete('/image-attachment/:id', async (req, res) => {
  *
  * TODO: occasionally scan DB for stray images not attached to any Twat and remove them
  */
-fileUploadRouter.post('/four-images', (req, res) => {
+uploadRouter.post('/four-images', (req, res) => {
   // Accept image upload...
   imageUpload(req, res, async (err) => {
     if (err instanceof multer.MulterError && err.code === 'LIMIT_UNEXPECTED_FILE') {
@@ -164,4 +184,4 @@ fileUploadRouter.post('/four-images', (req, res) => {
   });
 });
 
-module.exports = { deleteImageAttachment, fileUploadRouter };
+module.exports = { deleteImageAttachment, uploadRouter };

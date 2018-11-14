@@ -4,7 +4,7 @@ const flatten = require('array-flatten');
 
 const User = require('../database/user');
 const Twat = require('../database/twat');
-const { deleteImageAttachment } = require('./file-upload');
+const { deleteImageAttachment } = require('./upload');
 
 const twatsRouter = express.Router();
 twatsRouter.use(bodyParser.json());

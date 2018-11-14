@@ -39,12 +39,20 @@ class ModalTwat extends React.Component {
       repliesLoading: true,
       replies: [],
       replyEditorText: '',
+      imageUrls: [],
     });
 
     const { twatId } = match.params;
     axios.get(`/api/twats/${twatId}`)
       .then((res) => {
         this.setState({ mainTwatLoading: false, twat: res.data.twat });
+        return res.data.twat;
+      })
+      .then(async (twat) => {
+        if (twat.images) {
+          const res = await axios.get(`/api/uploads/image-attachment/${twat.images}`);
+          this.setState({ imageUrls: res.data });
+        }
       })
       .catch(err => console.error(`Error getting Twat info: ${err}`));
   }
@@ -87,7 +95,7 @@ class ModalTwat extends React.Component {
   }
 
   render() {
-    const { mainTwatLoading } = this.state;
+    const { mainTwatLoading, imageUrls } = this.state;
     if (mainTwatLoading) {
       return (
         <div className="modal-twat-content-wrapper">
@@ -123,6 +131,19 @@ class ModalTwat extends React.Component {
 
           <div className="twat-content">
             {twat.twatText}
+
+            {imageUrls.length === 4 ? (
+              <div className="image-attachments">
+                <div>
+                  <img src={imageUrls[0]} alt="ImageAttachment" key={imageUrls[0] + 0} />
+                  <img src={imageUrls[1]} alt="ImageAttachment" key={imageUrls[1] + 1} />
+                </div>
+                <div>
+                  <img src={imageUrls[2]} alt="ImageAttachment" key={imageUrls[2] + 2} />
+                  <img src={imageUrls[3]} alt="ImageAttachment" key={imageUrls[3] + 3} />
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <div className="datetime">

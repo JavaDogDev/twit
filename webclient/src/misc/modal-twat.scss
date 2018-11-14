@@ -83,6 +83,25 @@ $modal-border-radius: 6px;
     color: white;
     font-size: 1.7rem;
     margin-top: 10px;
+
+    .image-attachments {
+      display: flex;
+      flex-flow: column nowrap;
+      margin-top: 0.5em;
+
+      & > div {
+        display: flex;
+        margin-bottom: 6px;
+      }
+
+      img {
+        width: 200px;
+        height: 200px;
+        margin-right: 6px;
+        border-radius: 6px;
+        object-fit: cover;
+      }
+    }
   }
 
   .datetime {

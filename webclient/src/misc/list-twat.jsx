@@ -13,10 +13,24 @@ function mapStateToProps(state) {
 class ListTwat extends React.Component {
   constructor() {
     super();
-    this.state = { updatedTwat: null };
+    this.state = { updatedTwat: null, imageUrls: [] };
 
+    this.setImageUrls = this.setImageUrls.bind(this);
     this.likeTwat = this.likeTwat.bind(this);
     this.unlikeTwat = this.unlikeTwat.bind(this);
+  }
+
+  componentDidMount() {
+    const { initialTwat } = this.props;
+    if (initialTwat.images) {
+      axios.get(`/api/uploads/image-attachment/${initialTwat.images}`)
+        .then(res => this.setState({ imageUrls: res.data }))
+        .catch(err => console.error(`Couldn't get URLs for ImageAttachments:\n\t${err}`));
+    }
+  }
+
+  setImageUrls(imageUrls) {
+    this.setState({ imageUrls });
   }
 
   likeTwat() {
@@ -35,7 +49,7 @@ class ListTwat extends React.Component {
 
   render() {
     const { initialTwat, hideReplyIcon, currentUser } = this.props;
-    const { updatedTwat } = this.state;
+    const { updatedTwat, imageUrls } = this.state;
 
     /*
      * Default to the Twat data passed in as a prop, unless an updated Twat exists in component state
@@ -68,7 +82,22 @@ class ListTwat extends React.Component {
               <i className="material-icons">expand_more</i>
             </div>
           </div>
+
           <p className="twat-text">{twat.twatText}</p>
+
+          {imageUrls.length === 4 ? (
+            <div className="image-attachments">
+              <div>
+                <img src={imageUrls[0]} alt="ImageAttachment" key={imageUrls[0] + 0} />
+                <img src={imageUrls[1]} alt="ImageAttachment" key={imageUrls[1] + 1} />
+              </div>
+              <div>
+                <img src={imageUrls[2]} alt="ImageAttachment" key={imageUrls[2] + 2} />
+                <img src={imageUrls[3]} alt="ImageAttachment" key={imageUrls[3] + 3} />
+              </div>
+            </div>
+          ) : null}
+
           <div className="options-bar">
             {isReply ? (
               <span>
@@ -76,6 +105,7 @@ class ListTwat extends React.Component {
                 {initialTwat.numReplies ? initialTwat.numReplies : ''}
               </span>
             ) : null}
+
             {!isReply && !hideReplyIcon ? (
               <Link to={`/twat/${twat.replyingTo}`} style={{ textDecoration: 'none' }}>
                 <span title="Show thread">
@@ -84,16 +114,19 @@ class ListTwat extends React.Component {
                 </span>
               </Link>
             ) : null}
+
             <span>
               <i className="material-icons">autorenew</i>
               {twat.meta.retwats}
             </span>
+
             <span onClick={currentUserLiked ? this.unlikeTwat : this.likeTwat} role="button" tabIndex="0">
               <i className="material-icons" style={currentUserLiked ? { color: '#a97781' } : null}>
                 {currentUserLiked ? 'favorite' : 'favorite_border'}
               </i>
               {twat.meta.likedBy.length}
             </span>
+
             <span><i className="material-icons">message</i></span>
           </div>
         </div>
